@@ -32,20 +32,20 @@
     }
   ],
   "keywords": [
-  "genome",
-  "chromosome",
-  "SNP",
+  	"genome",
+  	"chromosome",
+  	"SNP",
 	"QTL",
 	"GWAS",
 	"gene",	
-  "visualisation",
-  "visualization",
-  "node",
-  "npm",
-  "nodejs",
-  "bower",
-  "D3",
-  "biojs"
+  	"visualisation",
+  	"visualization",
+  	"node",
+  	"npm",
+  	"nodejs",
+  	"bower",
+  	"D3",
+  	"biojs"
   ],
   "directories": {
     "doc": "docs",
