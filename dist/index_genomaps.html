@@ -7,16 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<link href="https://fonts.googleapis.com/css?family=Kanit|Play" rel="stylesheet">
-	<title>GenoMaps.js demo</title>
-    <!-- build:css styles/genemap-lib.css -->
-    <!-- bower:css -->
-    <!-- endbower -->
-    <!-- endbuild -->
+    <link rel="stylesheet" href="styles/genemap-lib.css">
 
-    <!-- build:css styles/genemap.css -->
-    <!-- inject:css -->
-    <!-- endinject -->
-    <!-- endbuild -->
+    <link rel="stylesheet" href="styles/genemap.css">
 
     <style>
       svg {
@@ -97,9 +90,9 @@
   <body>
 	
      <nav class="navbar navbar-default navbar-fixed-top" role="navigation">	  
-    	<a href="http://knetminer.rothamsted.ac.uk/"><img class="logo-top" src="img/genomaps.jpg" height="48" alt="Logo"></a>   
+    	<a href="#"><img class="logo-top" src="genomaps.jpg" height="48" alt="Logo"></a>   
        <ul class="nav navbar-nav" id="top">
-          <li><a target="_blank" href="https://github.com/Rothamsted/genomaps.js">GitHub</a>
+          <li><a target="_blank" href="https://github.com/KeywanHP/QTLNetMiner">GitHub</a>
           <a target="_blank" href="http://ondex.rothamsted.ac.uk/QTLNetMiner/releasenotes/guides/QTLNetMiner_UserGuide.pdf">User Guide</a></li>
     </ul>
  	</nav>  <!-- end navbar -->
@@ -112,7 +105,7 @@
       <option value='arabidopsis'>Arabidopsis</option>
       <option value='arabidopsis2'>Arabidopsis2</option>
       <option value='arabidopsis3'>Arabidopsis3</option>
-      <option selected="selected" value='arabidopsis4'>Arabidopsis4</option>
+      <option value='arabidopsis4'>Arabidopsis4</option>
       <option value='barley'>Barley</option>
       <option value='boleracea'>Boleracea</option>
       <option value='chicken'>Chicken</option>
@@ -120,7 +113,7 @@
       <option value='cow_milk'>Cow - Milk</option>
       <option value='cow_weight'>Cow - Weight</option>
       <option value='maize'>Maize</option>
-      <option value='poplar'>Poplar</option>
+      <option selected="selected" value='poplar'>Poplar</option>
       <option value='poplar2'>Poplar2</option>
       <option value='pig'>Pig</option>
       <option value='potato'>Potato</option>
@@ -130,9 +123,9 @@
       <option value='wheat4'>Wheat4</option>
       <option value='simple'>Simple</option>
     </select>
- 
+
     <span>Show Qtl Labels</span>
-    <select id="show-qtl-labels" disabled onchange="updateLabel();">
+    <select id="show-qtl-labels" onchange="updateLabel();">
       <option value='show'>Show</option>
       <option value='hide'>Hide</option>
       <option value='auto' selected='selected'>Auto</option>
@@ -141,11 +134,11 @@
 
     <span>Num Per Row:</span>
 
-    <input id="chromosome_per_row" disabled type="number" min="1" value="10" style="width:30px;" onclick="redraw();"/>
-    <input id="chk-annotations" disabled type="checkbox" checked="true" onclick="redraw();"> Include Annotations
-    <button disabled onclick="redraw(false)">Draw</button>
-    <button disabled onclick="redraw(true)">Reset Zoom</button>
-    <button disabled onclick="save()">Save</button>
+    <input id="chromosome_per_row" type="number" min="1" value="10" style="width:30px;" onclick="redraw();"/>
+    <input id="chk-annotations" type="checkbox" checked="true" onclick="redraw();"> Include Annotations
+    <button onclick="redraw(false)">Draw</button>
+    <button onclick="redraw(true)">Reset Zoom</button>
+    <button onclick="save()">Save</button>
 
 
     <div id ="wrapper" style = "position: relative; margin-left: auto; margin-right: auto; width: 90%; max-width: 960px; display: block">
@@ -153,41 +146,31 @@
       <p class="lorem-ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent accumsan vitae arcu sit amet elementum. Cras
         imperdiet urna nec orci tempor pulvinar. Curabitur mauris nunc, lacinia et mattis eu, congue sit amet libero.
         Integer eu hendrerit felis, non ultricies metus. Donec venenatis magna ut dui volutpat, a varius mauris
-        pharetra. </p>
+        pharetra. Nunc lacinia erat mi, a aliquet massa ullamcorper eu. Suspendisse auctor nunc vel nibh commodo
+        tincidunt. Quisque nec vestibulum turpis, sit amet posuere lacus. Quisque pretium rutrum urna non sollicitudin.
+        Nam nec dui consequat, sollicitudin magna porttitor, sollicitudin risus.</p>
 
       <div id="map" class='bootstrap'>
     </div>
-	<br/><br/>
-
-      <p class="lorem-ipsum">Suspendisse consequat tristique posuere. Aliquam nisl orci, tincidunt a ligula non, volutpat elementum eros.
-        Sed sit amet mattis enim. Integer molestie nisi lacus, at accumsan mauris efficitur a. Praesent in vestibulum
-        lacus. Nunc malesuada dignissim pellentesque. Etiam congue dolor sit amet felis tristique, at scelerisque nulla
-        congue. Maecenas varius nunc eu diam sagittis, ut sollicitudin arcu rhoncus. Morbi pretium aliquam est vel
-        faucibus. Sed rhoncus vel odio a lacinia. Cras ultricies lacus lacus, sit amet cursus odio ornare a. Quisque
-        finibus hendrerit est, id viverra lorem fringilla eu. In ut nibh mollis, placerat eros eu, iaculis ligula. Ut
-        hendrerit ante sed urna tincidunt volutpat. </p>
 
       <p class="lorem-ipsum">Sed ultrices quis odio id faucibus. Integer eu sapien in dui blandit dignissim. Nam volutpat massa libero,
         vitae mollis nulla ornare nec. Etiam fringilla ex ut dolor placerat consequat. Nullam tincidunt mi quam, ac
-        pharetra dolor condimentum nec. Morbi ut ligula sed metus interdum aliquam. </p>
+        pharetra dolor condimentum nec. Morbi ut ligula sed metus interdum aliquam. Morbi non enim blandit, venenatis
+        turpis eget, fringilla ligula. Maecenas tempus vel erat ac ultrices. Cras pharetra nisl aliquam augue luctus, eu
+        ultrices tortor scelerisque. Duis nec accumsan dolor. Curabitur aliquet pellentesque dui, in ornare mi.</p>
+
     </div>
 
 	</div>   <!-- end content -->
     
     <div class="contact-footer"> 
-      	<img class="knetminer-logo" src="img/genomaps.jpg" alt="Logo" with="201.5" height="66.3">
+      	<img class="knetminer-logo" src="genomaps.jpg" alt="Logo" with="201.5" height="66.3">
         <p id="text-logo">Supported by BBSRC SABR and TRDF awards BB/F006039/1 and BB/I023860/1</p> 
        </div> 
     
-    <!-- build:js js/genemap-lib.js -->
-    <!-- bower:js -->
-    <!-- endbower -->
-    <!-- endbuild -->
+    <script src="js/genemap-lib.js"></script>
 
-    <!-- build:js js/genemap.js -->
-    <!-- inject:js -->
-    <!--endinject -->
-    <!-- endbuild -->
+    <script src="js/genemap.js"></script>
 
     <script>
   log.setDefaultLevel( "info");
