@@ -6,4 +6,4 @@ GenoMaps.js - Interactive visualization of high-density SNP, QTL, GWAS and gene 
 
 Note:
 - To install and use, follow the steps to build detailed in the [Installation Guide](docs/installation_guide.md)
-- To simply run the [demo example](https://ondex.rothamsted.ac.uk/GenoMaps/index.html), copy the contents of the `dist` folder (contains code built after `gulp optimise` and example datasets for `basemaps` and `annotations`) and serve `index.html`.
+- To simply run the [demo example](http://knetminer.rothamsted.ac.uk/GenoMaps/), copy the contents of the `dist` folder (contains code built after `gulp optimise` and example datasets for `basemaps` and `annotations`) and serve `index.html`.
