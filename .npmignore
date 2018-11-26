@@ -1,9 +1,11 @@
 node_modules/*
 bower_components/
 .tmp/
-css/
-image/
-image_legend/
-libs/
-javascript/
+assets/
+dev/
+images/
+src/
+stylesheets/
+javascripts/
+test/
 
