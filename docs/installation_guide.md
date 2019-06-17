@@ -59,8 +59,10 @@ By default the chart will size to fit the containing element.
 
 The chart will then need to be drawn by creating a GeneMap object and calling the .draw() method:
 
-	var chart = GENEMAP.GeneMap();
+	var chart = GENEMAP.GeneMap({api_url: 'http://my.server:8080/server-example/arabidopsis/'});
 	chart.draw("#map", basemapPath, annotationsPath);
+
+**Note:** the `api_url` parameter is used to tell GeneMap how to construct URLs to send new queries to KnetMiner. It should include the full server method, name and port (`http://my.server:8080`), webapp (`server-example`), and datasource name (`arabidopsis` in this example). Omitting it will not break GeneMap but some KnetMiner-specific tasks may fail.
 
 The `basemapPath` and `annotationsPath` variable need to include a path to the basemap and annotations XML files that you want to draw on the chart. The annotationPath is optional and doesn't have to be supplied.
 
