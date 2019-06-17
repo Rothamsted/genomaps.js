@@ -88,3 +88,8 @@ There are a limited number of rendering options available on the chart object, t
 
 ## To test Genomap.js:
 After running, ```npm install```, ```bower install``` and ```gulp optimise``` in genomap.js directory, run ```gulp serve-dev``` and navigate to <http://localhost:8080/index.html> to run the demo page.
+
+
+
+**IMP:** If `bower` install throws npm error, add: `npm config set unsafe-perm true` before doing: `npm install bower gulp -g`.
+
