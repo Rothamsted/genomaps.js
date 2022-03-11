@@ -77,7 +77,9 @@
     "jshint-stylish": "^2.1.0",
     "run-sequence": "^1.1.5",
     "wiredep": "^3.0.0",
-    "yargs": "^4.1.0"
+    "yargs": "^4.1.0",
+    "event-stream": "4.0.1",
+    "fsevents": "2.3.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

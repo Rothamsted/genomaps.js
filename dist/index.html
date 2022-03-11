@@ -60,28 +60,11 @@
 	.contact-footer {
 		background-color:#2A2A2A;
 		color:white;
-		padding-bottom:5px;
-		padding-top:5px;
+		padding-bottom:10px;
+		padding-top:25px;
 		}
-	.left-footer {
-	float:left;
-	width:30%;
-	display:inline;
-	}
-	.center-footer {
-	float:left;
-	width:40%;
-	display:inline;
-	text-align:center;
-	}
-	.right-footer {
-	float:right;
-	width:28%;
-	display:inline;
-	padding-bottom:5px;
-	}
 	.contact-footer p {
-		font-size:15px;
+		font-size:12px;
 		color:white;
 		}
 	
@@ -107,14 +90,11 @@
 
   <body>
 	
-    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-	   <a target="_blank" href="https://knetminer.org"><img class="logo-top" src="img/logo-regular.png" height="48" alt="Logo"></a>   
+     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">	  
+    	<a href="http://knetminer.rothamsted.ac.uk/"><img class="logo-top" src="img/genomaps.jpg" height="48" alt="Logo"></a>   
        <ul class="nav navbar-nav" id="top">
-          <li>
-		    <a target="_blank" href="https://pub.uni-bielefeld.de/publication/2915227">Cite Us</a>
-            <a target="_blank" href="http://knetminer.rothamsted.ac.uk/KnetMiner/KnetMiner_Tutorial-v3.1.pdf">User Guide</a>
-		    <a target="_blank" href="https://github.com/Rothamsted/KnetMiner/issues">Report Issues</a>
-		  </li>
+          <li><a target="_blank" href="https://github.com/Rothamsted/genomaps.js">GitHub</a>
+          <a target="_blank" href="http://ondex.rothamsted.ac.uk/QTLNetMiner/releasenotes/guides/QTLNetMiner_UserGuide.pdf">User Guide</a></li>
     </ul>
  	</nav>  <!-- end navbar -->
     
@@ -188,27 +168,10 @@
 
 	</div>   <!-- end content -->
     
-    <div class="contact-footer">
-	      <ul style="overflow:hidden;margin-bottom: 0px;">
-		     <li class="left-footer">
-			   <a target="_blank" title="Rothamsted Research" href="http://www.rothamsted.ac.uk/" class="logos"><img src="img/rothamsted_logo.png" width="80" height="80"/></a>
-			   <a target="_blank" title="BBSRC" href="http://www.bbsrc.ac.uk/" class="logos"><img class="bbsrc-logo" src="img/bbsrc_logo.png"/></a>
-			 </li>
-		     <li class="center-footer">
-			   <a target="_blank" title="KnetMiner" href="https://knetminer.org" class="logos"><img src="img/logo-regular.png" height="90"/></a>
-			 </li>
-			 <li class="right-footer">
-			   <ul class="nav navbar-nav" id="bottom">
-			     <li>
-				   <p id="footer-text">Powered by <span style="color:darkOrange">Genomaps.js</span></p>
-				   <a target="_blank" href="https://www.npmjs.com/package/genomaps">NPM</a>
-				   <a target="_blank" href="https://github.com/Rothamsted/genomaps.js/blob/master/LICENSE">License</a>
-				   <a target="_blank" href="https://twitter.com/knetminer">Twitter</a>
-				 </li>
-			   </ul>
-			 </li>
-		  </ul>
-    </div>
+    <div class="contact-footer"> 
+      	<img class="knetminer-logo" src="img/genomaps.jpg" alt="Logo" with="201.5" height="66.3">
+        <p id="text-logo">Supported by BBSRC SABR and TRDF awards BB/F006039/1 and BB/I023860/1</p> 
+       </div> 
     
     <script src="js/genemap-lib.js"></script>
 
