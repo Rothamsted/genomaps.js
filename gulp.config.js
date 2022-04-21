@@ -25,10 +25,9 @@ module.exports = function () {
     build: './dist/',
 
     // configuration
-    bower: {
-      json: require('./bower.json'),
-      directory: './bower_components/',
-      ignorePath: '../bower_components/',
+    paths: {
+      bowerJson: 'package.json',
+      bowerDirectory: 'node_modules',
     },
 
     svgSpriteConfig: {
@@ -42,14 +41,18 @@ module.exports = function () {
     },
   };
 
-  config.getWiredepDefaultOptions = function () {
-    var options = {
-      bowerJson: config.bower.json,
-      directory: config.bower.directory,
-      ignorePath: config.bower.ignorePath,
-    };
+   config.getWiredepDefaultOptions = function () {
+     
+     var options = {
+      packageJson: require('./package.json'),
+        directory: './bower_components/',
+        dependencies: true,
+        includeSelf:true,
+      dependecies: true,
+      includeSelf:true
+     };
 
-    return options;
+     return options;
   };
 
   return config;

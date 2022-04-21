@@ -1,19 +1,17 @@
 /* Remove jQuery as $ so it can be used by gulp-load-plugins */
 /* globals require, -$ */
 
-var gulp  = require('gulp'),
+var {series,dest,src,task,parallel,watch}  = require('gulp'),
     args = require('yargs').argv,
     del = require('del'),
     runSequence = require('run-sequence'),
-    $ = require('gulp-load-plugins')({ lazy: true }),
+    $ = require('gulp-load-plugins')({ lazy: true}),
     config = require('./gulp.config')();
 
 // *** Code analysis ***
-
-gulp.task('vet', function () {
+task('vet', function () {
   $.util.log('Running static code analysis.');
-
-  return gulp.src(config.alljs)
+  return src(config.alljs)
     .pipe($.if(args.verbose, $.print()))
     .pipe($.jscs())
     .pipe($.jscs.reporter())
@@ -22,130 +20,129 @@ gulp.task('vet', function () {
 });
 
 // *** cleaning tasks ***
-function clean(path) {
+async function clean(path) {
   $.util.log('Cleaning: ' + $.util.colors.blue(path));
   return del(path);
 }
 
-gulp.task('clean-styles', function () {
+async function cleanStyles() {
   var files = config.tmpDir + '**/*.css';
   clean(files);
-});
+};
 
-gulp.task('clean-dist', function () {
+async function cleanDist () {
   clean('./dist/*');
-});
+};
 
 // *** CSS Compilation ***
-
-gulp.task('compile-styles', ['clean-styles'], function () {
+async function compileStyles() {
   $.util.log('Compiling Less to CSS.');
-
-  return gulp.src(config.less)
+  return src(config.less)
     .pipe($.plumber(function (err) {
       $.util.log(err);
       this.emit('end');
     }))
     .pipe($.less())
-    .pipe($.autoprefixer({ browsers: ['last 2 version', '> 5%'] }))
-    .pipe(gulp.dest(config.outputCssDir, {overwrite : true}));
-});
+    .pipe($.autoprefixer({  overrideBrowserslist : ['last 2 version', '> 5%'] }))
+    .pipe(dest(config.outputCssDir, {overwrite : true}));
+};
 
 // *** JS copying ***
-gulp.task('copy-js', function() {
+async function copyJs() {
   //Copy js into .tmp folder
   $.util.log('Moving js files into place');
-  return gulp.src(config.alljs)
-    .pipe(gulp.dest(config.srcDir, {overwrite : true}));
-});
+  return src(config.alljs)
+    .pipe(dest(config.srcDir, {overwrite : true}));
+};
 
 // *** HTML injection ***
-
-gulp.task('inject-html', ['compile-styles'],  function () {
+async function injectHtml() {
   $.util.log('injecting JavaScript and CSS into the html files');
 
-  var injectStyles = gulp.src(config.outputCss, { read: false });
-  var injectScripts = gulp.src(config.js, { read: false });
+  var injectStyles = src(config.outputCss, { read: false });
+  var injectScripts = src(config.js, { read: false });
 
   var wiredepOptions = config.getWiredepDefaultOptions();
   var injectOptions = {
     ignorePath: ['src', '.tmp'], addRootSlash: false,
   };
 
-  var wiredep = require('wiredep').stream;
+  var wiredep = require('wiredep').stream; 
 
-  return gulp.src(config.html)
+  return src(config.html)
     .pipe(wiredep(wiredepOptions))
     .pipe($.inject(injectStyles, injectOptions))
     .pipe($.inject(injectScripts, injectOptions))
-    .pipe(gulp.dest(config.srcDir), {overwrite: true});
-});
+    .pipe(dest(config.srcDir), {overwrite: true});
+
+  
+
+};
 
 
 // *** All Injection ***
-gulp.task('inject', ['compile-styles', 'copy-js', 'inject-html'] );
 
 // *** Watch and live reload ***
-
-gulp.task('watch-css', ['inject-html'], function () {
-  return gulp.watch(config.less, ['compile-styles'] );
-});
-
-gulp.task('watch-js', ['inject-html', 'copy-js'], function () {
-  return gulp.watch(config.js, ['copy-js'] );
-});
-
-gulp.task('watch-html', ['inject-html'], function () {
-  return gulp.watch(config.html, ['inject-html'] );
-});
-
-gulp.task( 'watch', ['watch-css', 'watch-js', 'watch-html']), function (){
-  return $.util.log('Watching  styles and js');
+async function watchCss() {
+  return watch(config.less,{usePolling:true}, series(compileStyles) );
 };
 
-gulp.task( 'reload', function() {
-  gulp.src(config.injectedHtml)
+// run inject html and copy js
+async function wactchJs() {
+  return watch(config.js,{usePolling:true}, series(copyJs) );
+ };
+
+// run inject-html
+async function watchHtml(){
+   return watch(config.html,{usePolling:true}, series(injectHtml));
+};
+
+ async function watchFiles(){
+  return $.util.log('Watching  styles and js');
+ };
+
+ async function reload() {
+  src(config.injectedHtml)
     .pipe($.connect.reload() );
+}
 
-})
-
-gulp.task('livereload', ['watch'],  function () {
+// watch 
+async function liveReload() {
   $.util.log('Connecting live reload');
-  //return gulp.watch(config.allOutputFiles, $.batch( function(){
-  //    gulp.src(config.injectedHtml)
+  //return watch(config.allOutputFiles, $.batch( function(){
+  //    src(config.injectedHtml)
   //      .pipe($.connect.reload() );
   //}));
-  return gulp.watch(config.allOutputFiles,  function(){
-    gulp.src(config.injectedHtml)
-      .pipe($.connect.reload() );
+  return watch(config.allOutputFiles,  function(){
+    src(config.injectedHtml)
+      .pipe($.connect.reload());
   });
-});
+};
 
 
-//gulp.task('serve-dev', [ 'livereload', 'inject'], function () {
-gulp.task('serve-dev', [ 'livereload'], function () {
+async function serveDev() {
   $.util.log('Starting serve-dev');
   return $.connect.server({
-    root: ['.tmp', 'assets', 'bower_components', 'test/data', 'test'],
+    root: ['.tmp', 'assets', 'node_modules', 'test/data', 'test'],
     port: '8080',
     livereload: true,
   });
-});
+};
 
-gulp.task('help', $.taskListing);
+task('help', $.taskListing);
 
 // create a default task and just log a message
-gulp.task('default', ['help']);
 
-gulp.task('copy-assets', ['clean-dist'], function () {
-  return gulp.src('./assets/img/*', {'base' :'./assets'})
-    .pipe(gulp.dest(config.build));
-});
 
-gulp.task('optimise', ['inject', 'copy-assets', 'clean-dist'], function () {
-  var assets = $.useref({ searchPath: ['.tmp', './bower_components'] });
+async function copyAssets() {
+  return src('./assets/img/*', {'base' :'./assets'})
+    .pipe(dest(config.build));
+};
 
-  return gulp.src(config.injectedHtml)
+async function optimise() {
+  var assets = $.useref({ searchPath: ['.tmp', './node_modules'] });
+
+  return src(config.injectedHtml)
     .pipe($.plumber(function (err) {
       $.util.log(err);
       this.emit('end');
@@ -153,15 +150,17 @@ gulp.task('optimise', ['inject', 'copy-assets', 'clean-dist'], function () {
     .pipe(assets)
     .pipe($.if('*.js', $.uglify()))
     .pipe($.if('*.css', $.csso()))
-    .pipe(gulp.dest(config.build));
-});
+    .pipe(dest(config.build));
+};
 
-gulp.task('serve-prod', ['optimise'], function () {
+
+task('serve-prod', series(optimise), function () {
   return $.connect.server({
     root: ['dist', 'test/data'],
     port: '8080',
     livereload: false,
   });
 });
-
-////////////
+exports.default = task('default', series('help'));
+exports.optimise = series(cleanStyles,cleanDist,parallel(series(compileStyles,copyJs,injectHtml),copyAssets),optimise); 
+exports.servedev = series(compileStyles,copyJs,injectHtml,watchCss,wactchJs,watchHtml,watchFiles,liveReload,serveDev)
