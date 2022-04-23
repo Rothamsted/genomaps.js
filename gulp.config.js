@@ -23,13 +23,6 @@ module.exports = function () {
     outputSvg: './.tmp/assets/*.svg',
 
     build: './dist/',
-
-    // configuration
-    paths: {
-      bowerJson: 'package.json',
-      bowerDirectory: 'node_modules',
-    },
-
     svgSpriteConfig: {
       mode: {
         defs: {
@@ -39,20 +32,6 @@ module.exports = function () {
         },
       },
     },
-  };
-
-   config.getWiredepDefaultOptions = function () {
-     
-     var options = {
-      packageJson: require('./package.json'),
-        directory: './bower_components/',
-        dependencies: true,
-        includeSelf:true,
-      dependecies: true,
-      includeSelf:true
-     };
-
-     return options;
   };
 
   return config;

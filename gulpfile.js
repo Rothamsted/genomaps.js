@@ -5,8 +5,15 @@ var {series,dest,src,task,parallel,watch}  = require('gulp'),
     args = require('yargs').argv,
     del = require('del'),
     runSequence = require('run-sequence'),
-    $ = require('gulp-load-plugins')({ lazy: true}),
+    $ = require('gulp-load-plugins')({lazy:true}),
+    mainBowerFiles = require('main-bower-files')
     config = require('./gulp.config')();
+
+    // Considering this to try this dependency to inject npm modules to html 
+    // mainNPMFiles = require('npmfiles'); 
+
+   
+
 
 // *** Code analysis ***
 task('vet', function () {
@@ -35,17 +42,18 @@ async function cleanDist () {
 };
 
 // *** CSS Compilation ***
-async function compileStyles() {
+task('compile-styles', series(cleanStyles, function () {
   $.util.log('Compiling Less to CSS.');
+
   return src(config.less)
     .pipe($.plumber(function (err) {
       $.util.log(err);
       this.emit('end');
     }))
     .pipe($.less())
-    .pipe($.autoprefixer({  overrideBrowserslist : ['last 2 version', '> 5%'] }))
+    .pipe($.autoprefixer({ overrideBrowserslist: ['last 2 version', '> 5%'] }))
     .pipe(dest(config.outputCssDir, {overwrite : true}));
-};
+}));
 
 // *** JS copying ***
 async function copyJs() {
@@ -56,50 +64,60 @@ async function copyJs() {
 };
 
 // *** HTML injection ***
-async function injectHtml() {
+task('inject-html', series('compile-styles', function () {
   $.util.log('injecting JavaScript and CSS into the html files');
+
+  var injectNpm = src(mainBowerFiles({
+    paths: {
+            bowerDirectory: 'node_modules',
+           bowerJson: 'package.json'
+          }
+  }));
 
   var injectStyles = src(config.outputCss, { read: false });
   var injectScripts = src(config.js, { read: false });
-
-  var wiredepOptions = config.getWiredepDefaultOptions();
   var injectOptions = {
     ignorePath: ['src', '.tmp'], addRootSlash: false,
   };
 
-  var wiredep = require('wiredep').stream; 
-
   return src(config.html)
-    .pipe(wiredep(wiredepOptions))
     .pipe($.inject(injectStyles, injectOptions))
     .pipe($.inject(injectScripts, injectOptions))
+    .pipe($.inject(injectNpm,{name:'npm'}))
     .pipe(dest(config.srcDir), {overwrite: true});
-
-  
-
-};
-
+}));
 
 // *** All Injection ***
+task('inject', series(parallel('compile-styles', copyJs, 'inject-html')));
+
 
 // *** Watch and live reload ***
-async function watchCss() {
-  return watch(config.less,{usePolling:true}, series(compileStyles) );
-};
+task('watch-css', series('inject-html', function () {
+  return watch(config.less, series('compile-styles'));
+}));
 
 // run inject html and copy js
-async function wactchJs() {
-  return watch(config.js,{usePolling:true}, series(copyJs) );
- };
+task('watch-js', series(parallel('inject-html', copyJs), function () {
+  return watch(config.js);
+}));
 
 // run inject-html
-async function watchHtml(){
-   return watch(config.html,{usePolling:true}, series(injectHtml));
-};
+task('watch-html', series('inject-html'), function () {
+  return watch(config.html);
+});
 
- async function watchFiles(){
+task( 'watch-tasks', series('watch-css', 'watch-js', 'watch-html', function (){
   return $.util.log('Watching  styles and js');
- };
+}));
+
+task('livereload', series('watch-tasks',  function () {
+  $.util.log('Connecting live reload');
+  return watch(config.allOutputFiles,  function(){
+    gulp.src(config.injectedHtml)
+      .pipe($.connect.reload() );
+  });
+}));
+
 
  async function reload() {
   src(config.injectedHtml)
@@ -107,31 +125,16 @@ async function watchHtml(){
 }
 
 // watch 
-async function liveReload() {
-  $.util.log('Connecting live reload');
-  //return watch(config.allOutputFiles, $.batch( function(){
-  //    src(config.injectedHtml)
-  //      .pipe($.connect.reload() );
-  //}));
-  return watch(config.allOutputFiles,  function(){
-    src(config.injectedHtml)
-      .pipe($.connect.reload());
-  });
-};
-
-
-async function serveDev() {
+async  function serveDev() {
   $.util.log('Starting serve-dev');
   return $.connect.server({
-    root: ['.tmp', 'assets', 'node_modules', 'test/data', 'test'],
+    root: ['.tmp', 'assets', 'bower_components', 'test/data', 'test'],
     port: '8080',
     livereload: true,
   });
 };
 
-task('help', $.taskListing);
 
-// create a default task and just log a message
 
 
 async function copyAssets() {
@@ -139,7 +142,9 @@ async function copyAssets() {
     .pipe(dest(config.build));
 };
 
-async function optimise() {
+
+task('compile-all', series(parallel('inject', copyAssets, cleanDist), function () {
+
   var assets = $.useref({ searchPath: ['.tmp', './node_modules'] });
 
   return src(config.injectedHtml)
@@ -151,16 +156,19 @@ async function optimise() {
     .pipe($.if('*.js', $.uglify()))
     .pipe($.if('*.css', $.csso()))
     .pipe(dest(config.build));
-};
+}));
 
-
-task('serve-prod', series(optimise), function () {
+task('serve-prod', series('compile-all', function () {
   return $.connect.server({
     root: ['dist', 'test/data'],
     port: '8080',
     livereload: false,
   });
-});
+}));
+
+// create a default task and just log a message
+task('help', $.taskListing);
+
+exports.optimise = task('optimise', series('compile-all'));
 exports.default = task('default', series('help'));
-exports.optimise = series(cleanStyles,cleanDist,parallel(series(compileStyles,copyJs,injectHtml),copyAssets),optimise); 
-exports.servedev = series(compileStyles,copyJs,injectHtml,watchCss,wactchJs,watchHtml,watchFiles,liveReload,serveDev)
+exports.servedev = series('livereload', serveDev); 
