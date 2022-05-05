@@ -34,5 +34,12 @@ module.exports = function () {
     },
   };
 
+  config.getWiredepDefaultOptions = function () {
+    var options = {
+      directory:'./node_modules',
+      packageJson: require('./package.json'),
+    };
+    return options
+  }
   return config;
 };
