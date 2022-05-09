@@ -6,8 +6,15 @@ var {series,dest,src,task,parallel,watch}  = require('gulp'),
     del = require('del'),
     runSequence = require('run-sequence'),
     $ = require('gulp-load-plugins')({lazy:true}),
-    wireDev = require('npm-wiredep').stream,
+    wiredep = require('wiredep').stream,
     config = require('./gulp.config')();
+
+
+      
+
+      
+
+
   
    
 // *** Code analysis ***
@@ -48,7 +55,7 @@ function compileStyles() {
       this.emit('end');
     }))
     .pipe($.less())
-    .pipe($.autoprefixer({}))
+    .pipe($.autoprefixer())
     .pipe(dest(config.outputCssDir, {overwrite : true}));
 };
 
@@ -64,18 +71,20 @@ function copyJs() {
 function injectHtml() {
   $.util.log('injecting JavaScript and CSS into the html files');
 
+  var wiredepOptions = config.getWiredepDefaultOptions()
+
   var injectStyles = src(config.outputCss, { read: false });
   var injectScripts = src(config.js, { read: false });
-  var wiredepOptions = config.getWiredepDefaultOptions();
-  var injectOptions = {
-    ignorePath: ['src', '.tmp'], addRootSlash: false,
-  };
+  var injectOptions = {ignorePath: ['src', '.tmp'], };
+
   return src(config.html)
-    .pipe($.inject(injectStyles, injectOptions))
+    .pipe(wiredep(wiredepOptions))
+    .pipe($.inject(injectStyles, injectOptions),)
     .pipe($.inject(injectScripts, injectOptions))
-    .pipe(wireDev(wiredepOptions))
-    .pipe(dest(config.srcDir), {overwrite: true});
+    .pipe(dest(config.srcDir), {overwrite: false})
 };
+
+
 
 // *** All Injection called in compile all task***
 // series(cleanStyles,compileStyles,copyJs,injectHtml)
@@ -121,7 +130,7 @@ async function liveReload() {
  async function serveDev() {
   $.util.log('Starting serve-dev');
   return $.connect.server({
-    root: ['.tmp', 'assets', 'node_modules', 'test/data', 'test'],
+    root: ['.tmp', 'assets', 'bower_components', 'test/data', 'test'],
     port: '8080',
     livereload: true,
   });
@@ -134,7 +143,7 @@ function copyAssets () {
 };
 
 
-function compileAll() {
+async function compileAll() {
 
   return src(config.injectedHtml)
 
@@ -143,7 +152,7 @@ function compileAll() {
       this.emit('end');
     }))
 
-    .pipe($.useref({ searchPath: ['./.tmp','./node_modules'] }))
+    .pipe($.useref({ searchPath: ['./.tmp','./bower_components'] }))
     .pipe($.if('*.js', $.terser()))
     .pipe($.if('*.css', $.csso()))
     .pipe(dest(config.build));
@@ -162,4 +171,4 @@ task('help', $.taskListing);
 
 exports.default = task('default', series('help'));
 exports.optimise = series(cleanStyles,compileStyles,copyJs,injectHtml,cleanDist,copyAssets,compileAll);
-exports.servedev = series(parallel(injectHtml,copyJs),watchCss,watchJs,watchHtml,watchTasks,liveReload,serveDev); 
+exports.servedev = series(parallel(copyJs,injectHtml),watchCss,watchJs,watchHtml,watchTasks,liveReload,serveDev); 

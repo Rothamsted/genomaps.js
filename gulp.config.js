@@ -14,6 +14,13 @@ module.exports = function () {
     js: './src/js/*.js',
     svg: './assets/svg/*.svg',
 
+     // configuration
+     bower: {
+      json: require('./bower.json'),
+      directory: './bower_components/',
+      ignorePath: '../bower_components/',
+    },
+
     // the development output
     srcDir: './.tmp/',
     allOutputFiles: './.tmp/**/*',
@@ -36,10 +43,12 @@ module.exports = function () {
 
   config.getWiredepDefaultOptions = function () {
     var options = {
-      directory:'./node_modules',
-      packageJson: require('./package.json'),
+      bowerJson: config.bower.json,
+      directory: config.bower.directory,
+      ignorePath: config.bower.ignorePath,
     };
-    return options
-  }
+
+    return options;
+  };
   return config;
 };
