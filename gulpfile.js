@@ -6,17 +6,10 @@ var {series,dest,src,task,parallel,watch}  = require('gulp'),
     del = require('del'),
     runSequence = require('run-sequence'),
     $ = require('gulp-load-plugins')({lazy:true}),
-    wiredep = require('wiredep').stream,
+    wiredep = require('wiredep-away').stream,
     config = require('./gulp.config')();
-
-
       
 
-      
-
-
-  
-   
 // *** Code analysis ***
 task('vet', function () {
   $.util.log('Running static code analysis.');
@@ -69,10 +62,9 @@ function copyJs() {
 
 // *** HTML injection ***
 function injectHtml() {
+
   $.util.log('injecting JavaScript and CSS into the html files');
-
   var wiredepOptions = config.getWiredepDefaultOptions()
-
   var injectStyles = src(config.outputCss, { read: false });
   var injectScripts = src(config.js, { read: false });
   var injectOptions = {ignorePath: ['src', '.tmp'], };
@@ -130,7 +122,7 @@ async function liveReload() {
  async function serveDev() {
   $.util.log('Starting serve-dev');
   return $.connect.server({
-    root: ['.tmp', 'assets', 'bower_components', 'test/data', 'test'],
+    root: ['.tmp', 'assets', 'node_modules/bower_components', 'test/data', 'test'],
     port: '8080',
     livereload: true,
   });
@@ -152,7 +144,7 @@ async function compileAll() {
       this.emit('end');
     }))
 
-    .pipe($.useref({ searchPath: ['./.tmp','./bower_components'] }))
+    .pipe($.useref({ searchPath: ['./.tmp','./node_modules/@bower_components'] }))
     .pipe($.if('*.js', $.terser()))
     .pipe($.if('*.css', $.csso()))
     .pipe(dest(config.build));

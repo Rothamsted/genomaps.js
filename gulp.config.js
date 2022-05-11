@@ -16,9 +16,9 @@ module.exports = function () {
 
      // configuration
      bower: {
-      json: require('./bower.json'),
-      directory: './bower_components/',
-      ignorePath: '../bower_components/',
+      json: require('./package.json'),
+      directory: './node_modules/@bower_components/',
+     
     },
 
     // the development output
@@ -43,9 +43,9 @@ module.exports = function () {
 
   config.getWiredepDefaultOptions = function () {
     var options = {
-      bowerJson: config.bower.json,
-      directory: config.bower.directory,
-      ignorePath: config.bower.ignorePath,
+      packageJson: config.bower.json,
+      scope:'@bower_components/',
+      verbose: true
     };
 
     return options;
