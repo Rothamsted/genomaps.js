@@ -24,6 +24,7 @@ module.exports = function () {
 
     build: './dist/',
 
+    // TODO: remove
     // configuration
     bower: {
       json: require('./bower.json'),
