@@ -68,12 +68,12 @@ gulp.task('inject-html', ['compile-styles'],  function () {
   var injectStyles = gulp.src(config.outputCss, { read: false });
   var injectScripts = gulp.src(config.js, { read: false });
 
-  var wiredepOptions = config.getWiredepDefaultOptions();
+  //var wiredepOptions = config.getWiredepDefaultOptions();
   var injectOptions = {
     ignorePath: ['src', '.tmp'], addRootSlash: false,
   };
 
-  var wiredep = require('wiredep').stream;
+  //var wiredep = require('wiredep').stream;
 
   return gulp.src(config.html)
     //.pipe(wiredep(wiredepOptions))
