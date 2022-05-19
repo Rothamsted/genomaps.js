@@ -4,6 +4,7 @@
 var gulp  = require('gulp'),
     args = require('yargs').argv,
     del = require('del'),
+    // TODO: never used, to be removed?
     runSequence = require('run-sequence'),
     $ = require('gulp-load-plugins')({ lazy: true }),
     config = require('./gulp.config')();
@@ -75,7 +76,7 @@ gulp.task('inject-html', ['compile-styles'],  function () {
   var wiredep = require('wiredep').stream;
 
   return gulp.src(config.html)
-    .pipe(wiredep(wiredepOptions))
+    //.pipe(wiredep(wiredepOptions))
     .pipe($.inject(injectStyles, injectOptions))
     .pipe($.inject(injectScripts, injectOptions))
     .pipe(gulp.dest(config.srcDir), {overwrite: true});
@@ -126,7 +127,8 @@ gulp.task('livereload', ['watch'],  function () {
 gulp.task('serve-dev', [ 'livereload'], function () {
   $.util.log('Starting serve-dev');
   return $.connect.server({
-    root: ['.tmp', 'assets', 'bower_components', 'test/data', 'test'],
+    //root: ['.tmp', 'assets', 'bower_components', 'test/data', 'test'],
+    root: ['.tmp', 'assets', 'test/data', 'test'],
     port: '8080',
     livereload: true,
   });
@@ -143,7 +145,8 @@ gulp.task('copy-assets', ['clean-dist'], function () {
 });
 
 gulp.task('optimise', ['inject', 'copy-assets', 'clean-dist'], function () {
-  var assets = $.useref({ searchPath: ['.tmp', './bower_components'] });
+  // var assets = $.useref({ searchPath: ['.tmp', './bower_components'] });
+  var assets = $.useref({ searchPath: ['.tmp'] });
 
   return gulp.src(config.injectedHtml)
     .pipe($.plumber(function (err) {

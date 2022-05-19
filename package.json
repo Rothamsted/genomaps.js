@@ -1,6 +1,6 @@
 {
   "name": "genomaps",
-  "version": "1.0.3",
+  "version": "2.0.0-SNAPSHOT",
   "license": "MIT",
   "description": "Interactive visualization of high-density SNP, QTL, GWAS and gene data",
   "main": "genomaps.js",
@@ -43,7 +43,6 @@
     "node",
     "npm",
     "nodejs",
-    "bower",
     "D3",
     "biojs"
   ],
@@ -51,7 +50,48 @@
     "doc": "docs",
     "test": "test"
   },
-  "dependencies": {},
+  "//migrated from bower": {
+    "jquery": "1.12.0",
+    "bootstrap": "^3.3.6",
+    "d3": "3.4.13",
+    "lodash": "^4.5.1",
+    "es6-promise": "^3.2.1",
+    "d3.promise": "^1.1.0",
+    "labella": "^1.1.1",
+    "file-saver.js": "^1.20150507.2",
+    "simple-statistics": "v1.0.1",
+    "loglevel": "~1.4.1",
+    "saveSvgAsPng": "https://github.com/exupero/saveSvgAsPng.git#~1.0.1",
+    "bootstrap-touchspin": "~3.1.1",
+    "es6-shim": "~0.35.1",
+    "es5-shim": "^4.5.9",
+    "jquery-ui": "^1.12.0",
+    "array-includes": "^1.0.0",
+    "bootstrap-select": "^1.11.0"
+  },  
+  "dependencies": {
+    "jquery": "1.12.0",
+    "bootstrap": "^3.3.6",
+    "d3": "7.4.4",
+    "lodash": "^4.5.1",
+    "es6-promise": "^3.2.1",
+    "d3.promise": "^2.0.0",
+    "labella": "^1.1.1",
+    "file-saver": "^2.0.5",
+    "simple-statistics": "v1.0.1",
+    "loglevel": "~1.4.1",
+    "save-svg-as-png": "~1.4.17",
+    "bootstrap-touchspin": "~3.1.1",
+    "es6-shim": "~0.35.1",
+    "es5-shim": "^4.5.9",
+    "jquery-ui": "^1.12.0",
+    "array-includes": "^1.0.0",
+    "bootstrap-select": "^1.11.0"
+  },
+  "// migrated from bower": {
+    "jasmine-core": "jasmine#^2.4.1",
+    "jasmine-collection-matchers": "^0.1.2"
+  },
   "devDependencies": {
     "del": "^2.2.0",
     "gulp": "^3.9.1",
@@ -79,7 +119,9 @@
     "wiredep": "^3.0.0",
     "yargs": "^4.1.0",
     "event-stream": "4.0.1",
-    "fsevents": "2.3.2"
+    "fsevents": "2.3.2",
+    "jasmine-core": "^4.1.1",
+    "jasmine-collection-matchers": "^0.2.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
