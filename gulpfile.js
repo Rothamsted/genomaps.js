@@ -6,6 +6,14 @@ var gulp  = require('gulp'),
     del = require('del'),
     // TODO: never used, to be removed?
     runSequence = require('run-sequence'),
+    source = require('vinyl-source-stream'),
+    browserify = require('browserify'),
+    packageJson = require('./package.json'),
+    buffer = require('vinyl-buffer'),
+    sourcemaps = require('gulp-sourcemaps'),
+    uglify = require('gulp-uglify'),
+    concatCss = require('gulp-concat-css');
+    
     $ = require('gulp-load-plugins')({ lazy: true }),
     config = require('./gulp.config')();
 
@@ -59,6 +67,38 @@ gulp.task('copy-js', function() {
   return gulp.src(config.alljs)
     .pipe(gulp.dest(config.srcDir, {overwrite : true}));
 });
+
+gulp.task('bundle-deps', function () {
+
+  var deps = Object.keys(packageJson.dependencies)
+    .map(module => `node_modules/${module}/**/*.js`);
+  
+  // set up the browserify instance on a task basis
+  var b = browserify({
+    entries: './package.json',
+    debug: true
+  });
+  return b.bundle()
+    .pipe(source('genemap-lib.js'))
+    .pipe(buffer())
+    .pipe(sourcemaps.init({loadMaps: true})) // debug info for the browser
+    .pipe(uglify())
+    .pipe(sourcemaps.write('./')) 
+    .pipe(gulp.dest('./dist/js/'));
+});
+
+
+gulp.task('bundle-deps-css', function () {
+
+  var deps = Object.keys(packageJson.dependencies);
+  var depsCss = deps.map(module => `node_modules/${module}/**/*.css`);
+  
+  return gulp.src( depsCss )
+    .pipe(concatCss("genemap-lib.css"))
+    .pipe(gulp.dest('dist/styles/'));        
+});
+
+
 
 // *** HTML injection ***
 

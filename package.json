@@ -122,7 +122,12 @@
     "event-stream": "4.0.1",
     "fsevents": "2.3.2",
     "jasmine-core": "^4.1.1",
-    "jasmine-collection-matchers": "^0.2.0"
+    "jasmine-collection-matchers": "^0.2.0",
+    "browserify": "^17.0.0",
+    "vinyl-source-stream": "^2.0.0",
+    "vinyl-buffer": "^1.0.1",
+    "gulp-sourcemaps": "3.0.0",
+    "gulp-concat-css": "3.1.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
