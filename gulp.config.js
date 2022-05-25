@@ -1,4 +1,3 @@
-/* globals  module, require, -$ */
 
 module.exports = function () {
   var config = {
@@ -7,19 +6,15 @@ module.exports = function () {
 
     // all the JavaScript files for this project
     alljs: ['./src/**/*.js', './*.js'],
+    srcJS: './src/js/',
 
     // all the source files
     less: ['./src/less/*.less', '!./src/less/variables.less'],
+    css: './lib/*.css',
+    libjs: './lib/*.js',
     html: './src/*.html',
     js: './src/js/*.js',
     svg: './assets/svg/*.svg',
-
-     // configuration
-     bower: {
-      json: require('./package.json'),
-      directory: './node_modules/@bower_components/',
-     
-    },
 
     // the development output
     srcDir: './.tmp/',
@@ -43,12 +38,10 @@ module.exports = function () {
 
   config.getWiredepDefaultOptions = function () {
     var options = {
-      packageJson: config.bower.json,
-      scope:'@bower_components/',
-      verbose: true
+      directory:'./node_modules',
+      packageJson: require('./package.json'),
     };
-
-    return options;
-  };
+    return options
+  }
   return config;
 };

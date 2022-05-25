@@ -9,6 +9,12 @@
     "type": "git",
     "url": "https://github.com/Rothamsted/genomaps.js"
   },
+  "ignore":[
+    "**/.*",
+    "node_modules",
+    "tests",
+    "tests"
+  ],
   "bugs": {
     "url": "https://github.com/Rothamsted/genomaps.js/issues"
   },
@@ -52,28 +58,27 @@
     "test": "test"
   },
   "dependencies": {
-    "@bower_components/array-includes": "adamaoc/array-includes#^1.0.0",
-    "@bower_components/bootstrap": "twbs/bootstrap#^3.3.6",
-    "@bower_components/bootstrap-select": "snapappointments/bootstrap-select#^1.11.0",
-    "@bower_components/bootstrap-touchspin": "istvan-ujjmeszaros/bootstrap-touchspin#~3.1.1",
-    "@bower_components/d3": "mbostock-bower/d3-bower#5.16.0",
-    "@bower_components/d3.promise": "kristw/d3.promise#^2.0.0",
-    "@bower_components/es5-shim": "es-shims/es5-shim#^4.5.9",
-    "@bower_components/es6-promise": "components/es6-promise#^3.2.1",
-    "@bower_components/es6-shim": "paulmillr/es6-shim#~0.35.1",
-    "@bower_components/file-saver.js": "eligrey/FileSaver.js#~2.0.4",
-    "@bower_components/jasmine-collection-matchers": "just-boris/jasmine-collection-matchers#^0.1.2",
-    "@bower_components/jasmine-core": "pivotal/jasmine#^2.4.1",
-    "@bower_components/jquery": "jquery/jquery-dist#1.12.0",
-    "@bower_components/jquery-ui": "components/jqueryui#^1.12.0",
-    "@bower_components/labella": "twitter/labella.js#^1.1.1",
-    "@bower_components/lodash": "lodash/lodash#^4.5.1",
-    "@bower_components/loglevel": "pimterry/loglevel#~1.4.1",
-    "@bower_components/saveSvgAsPng": "exupero/saveSvgAsPng#~1.0.1",
-    "@bower_components/simple-statistics": "tmcw/simple-statistics#v1.0.1"
+    "array-includes": "^1.0.0",
+    "bootstrap": "^3.3.6",
+    "bootstrap-select": "^1.11.0",
+    "bootstrap-touchspin": "~3.1.1",
+    "d3": "^3.5.4",
+    "d3.promise": "^2.0.0",
+    "es5-shim": "^4.5.9",
+    "es6-promise": "^3.2.1",
+    "es6-shim": "~0.35.1",
+    "file-saver": "^1.3.8",
+    "jquery": "3.6.0",
+    "jquery-ui": "^1.12.0",
+    "labella": "^1.1.1",
+    "lodash": "^4.17.21",
+    "loglevel": "~1.4.1",
+    "saveSvgAsPng": "https://github.com/exupero/saveSvgAsPng.git#v1.0.1",
+    "simple-statistics": "v1.0.1",
+    "util": "^0.12.4"
   },
   "devDependencies": {
-    "bower-away": "^1.1.2",
+    "copy-webpack-plugin": "^5.1.1",
     "del": "^2.2.0",
     "event-stream": "4.0.1",
     "fsevents": "2.3.2",
@@ -104,15 +109,15 @@
     "jasmine-core": "https://github.com/jasmine/jasmine#v2.4.1",
     "jshint": "^2.9.1",
     "jshint-stylish": "^2.1.0",
-    "main-bower-files": "^2.8.0",
-    "npm-wiredep": "^0.0.4",
     "run-sequence": "^1.1.5",
+    "uniq": "^1.0.1",
     "util": "^0.12.4",
-    "wiredep-away": "https://github.com/azachar/wiredep-away#master",
+    "webpack": "^5.72.1",
+    "webpack-cli": "^4.9.2",
     "yargs": "^17.4.1"
   },
   "overrides": {
-    "@bower_components/bootstrap-touchspin": {
+    "bootstrap-touchspin": {
       "main": [
         "dist/jquery.bootstrap-touchspin.min.js",
         "dist/jquery.bootstrap-touchspin.min.css"
@@ -124,10 +129,6 @@
     "> 5%"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "node -e \"try { require('fs').symlinkSync(require('path').resolve('node_modules/@bower_components'), 'bower_components', 'junction') } catch (e) { }\""
-  },
-  "engines": {
-    "yarn": ">= 1.0.0"
+    "webpack": "webpack"
   }
 }
