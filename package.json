@@ -9,7 +9,7 @@
     "type": "git",
     "url": "https://github.com/Rothamsted/genomaps.js"
   },
-  "ignore":[
+  "ignore": [
     "**/.*",
     "node_modules",
     "tests",
