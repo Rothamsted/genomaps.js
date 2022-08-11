@@ -4,9 +4,8 @@
 var {series,dest,src,task,parallel,watch}  = require('gulp'),
     args = require('yargs').argv,
     del = require('del'),
+    streamflow = require('stream-series'),
     $ = require('gulp-load-plugins')({lazy:true}),
-   webpack = require('webpack'),
-   webConfig = require ('./webpack.config'),
     config = require('./gulp.config')();
       
 
@@ -22,88 +21,73 @@ task('vet', function () {
 });
 
 
-async function addNodeModules(){
-  $.util.log('copying node modules to tmp folder');
-    webpack(webConfig, (err,stats)=> {
-      if(err){
-        return reject(err)
-      }
-      if(stats.hasErrors()){
-        return reject(new Error(stats.compilation.errors.join('\n')))
-      }
-    })
-    
-
-}
-
 // *** cleaning tasks ***
  async function clean(path) {
   $.util.log('Cleaning: ' + $.util.colors.blue(path));
   return del(path);
 }
 
+// ** clean styles 
 function cleanStyles(done) {
   var files = config.tmpDir + '**/*.css';
   clean(files);
   done();
 };
 
+// ** clean Dist
 function cleanDist (done) {
   clean('./dist/*');
   done(); 
 };
 
-// *** CSS Compilation ***
-function compileStyles() {
-  $.util.log('Compiling Less to CSS.');
-  return src(config.less)
-    .pipe($.plumber(function (err) {
-      $.util.log(err);
-      this.emit('end');
-    }))
-    .pipe($.less())
-    .pipe($.autoprefixer())
-    .pipe(dest(config.outputCssDir, {overwrite : true}));
+// ** Copying bootstrap touchspin styles ** 
+function copyLibCss () {
+  return src(config.libCss)
+    .pipe(dest(config.outputLibCss),{append:true});
 };
 
-function copyLibCss () {
-  return src(config.css)
+// ** Style Copying ***
+function copyCss(){
+  return src(config.srcCSS)
     .pipe(dest(config.outputCssDir),{append:true});
 };
 
+// ** Jquery related files copying **
+async function copyLibJq(){
+  return src(config.libJquery) 
+    .pipe(dest(config.outputLibJq));
+}
+//** non-jquery **
 async function copyLibJs(){
-  return src(config.libjs) 
-    .pipe(dest(config.srcJS));
+  return src(config.libnoJquery) 
+    .pipe(dest(config.outputLibJs));
 }
 
 // *** JS copying ***
 function copyJs(){
   //Copy js into .tmp folder
   $.util.log('Moving js files into place');
-  return src(config.alljs)
-    .pipe(dest(config.srcDir, {overwrite :true}));
+  return src(config.srcJS)
+    .pipe(dest(config.outputJsDir, {overwrite :true}));
 };
+
 
 // *** HTML injection ***
 function injectHtml() {
   $.util.log('injecting JavaScript and CSS into the html files');
-  var injectStyles = src(config.outputCss, { read: false });
+  var injectLibStyles = src(config.libCss, { read: false });
+  var injectJqScripts = src(config.libJquery, { read: false });
+  var injectJsibScripts = src(config.libnoJquery, { read: false });
+  var injectStyles = src(config.srcCSS, { read: false });
   var injectScripts = src(config.js, { read: false });
   var injectOptions = {ignorePath: ['src', '.tmp'], };
   return src(config.html)
-    .pipe($.inject(injectStyles, injectOptions),)
-    .pipe($.inject(injectScripts, injectOptions))
+    .pipe($.inject(streamflow(injectJqScripts,injectJsibScripts,injectScripts), injectOptions))
+    .pipe($.inject(streamflow(injectLibStyles,injectStyles), injectOptions))
     .pipe(dest(config.srcDir), {overwrite: false})
 };
 
-// *** All Injection called in compile all task***
-// series(cleanStyles,compileStyles,copyJs,injectHtml)
 
-
-// *** Watch and live reload ***
- async function watchCss () {
-  return watch(config.less, compileStyles);
-};
 
 // run inject html and copy js
 // parallel('inject-html', copyJs),
@@ -128,6 +112,7 @@ async function liveReload() {
       .pipe($.connect.reload() );
   });
 };
+
 
  async function reload() {
   src(config.injectedHtml)
@@ -163,7 +148,7 @@ async function compileAll(){
     .pipe(dest(config.build));
 };
 
-task('serve-prod', series(compileStyles, function(){
+task('serve-prod', series(function(){
   return $.connect.server({
     root: ['dist', 'test/data'],
     port: '8080',
@@ -175,5 +160,5 @@ task('serve-prod', series(compileStyles, function(){
 task('help', $.taskListing);
 
 exports.default = task('default', series('help'));
-exports.optimise = series(addNodeModules,cleanStyles,compileStyles,copyLibCss,copyLibJs,copyJs,injectHtml,cleanDist,copyAssets,compileAll);
-exports.servedev = series(parallel(copyLibJs,copyJs,injectHtml),watchCss,watchJs,watchHtml,watchTasks,liveReload,serveDev); 
+exports.optimise = series(cleanStyles,copyCss,copyLibCss,copyLibJs,copyLibJq,copyJs,injectHtml,cleanDist,copyAssets,compileAll);
+exports.servedev = series(parallel(copyCss,copyLibCss,copyLibJs,copyLibJq,copyJs,injectHtml),watchJs,watchHtml,watchTasks,liveReload,serveDev); 

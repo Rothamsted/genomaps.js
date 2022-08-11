@@ -75,6 +75,7 @@
     "loglevel": "~1.4.1",
     "saveSvgAsPng": "https://github.com/exupero/saveSvgAsPng.git#v1.0.1",
     "simple-statistics": "v1.0.1",
+    "stream-series": "^0.1.1",
     "util": "^0.12.4"
   },
   "devDependencies": {
