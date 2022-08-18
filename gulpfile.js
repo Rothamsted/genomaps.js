@@ -7,6 +7,10 @@ var {series,dest,src,task,parallel,watch}  = require('gulp'),
     streamflow = require('stream-series'),
     $ = require('gulp-load-plugins')({lazy:true}),
     config = require('./gulp.config')();
+
+    // webpack config 
+    var webpack = require('webpack'), 
+    webpackConfig = require("./webpack.config");
       
 
 // *** Code analysis ***
@@ -31,14 +35,30 @@ task('vet', function () {
 function cleanStyles(done) {
   var files = config.tmpDir + '**/*.css';
   clean(files);
+  clean('./src/lib/*');
   done();
 };
 
 // ** clean Dist
 function cleanDist (done) {
   clean('./dist/*');
+
   done(); 
 };
+
+// copying node_modules from package.Json
+async function fetchModules(){
+    $.util.log('copying node modules to lib folder')
+      webpack(webpackConfig, (err, stats)=> {
+      if(err){
+        return reject(err)
+      }
+      if(stats.hasErrors()){
+        return reject(new Error(stats.compilation.errors.join('.\n')))
+      }
+    })
+}
+
 
 // ** Copying bootstrap touchspin styles ** 
 function copyLibCss () {
@@ -77,7 +97,7 @@ function injectHtml() {
   $.util.log('injecting JavaScript and CSS into the html files');
   var injectLibStyles = src(config.libCss, { read: false });
   var injectJqScripts = src(config.libJquery, { read: false });
-  var injectJsibScripts = src(config.libnoJquery, { read: false });
+  var injectJsibScripts = src(config.libnoJquery, { read: false});
   var injectStyles = src(config.srcCSS, { read: false });
   var injectScripts = src(config.js, { read: false });
   var injectOptions = {ignorePath: ['src', '.tmp'], };
@@ -86,8 +106,6 @@ function injectHtml() {
     .pipe($.inject(streamflow(injectLibStyles,injectStyles), injectOptions))
     .pipe(dest(config.srcDir), {overwrite: false})
 };
-
-
 
 // run inject html and copy js
 // parallel('inject-html', copyJs),
@@ -160,5 +178,5 @@ task('serve-prod', series(function(){
 task('help', $.taskListing);
 
 exports.default = task('default', series('help'));
-exports.optimise = series(cleanStyles,copyCss,copyLibCss,copyLibJs,copyLibJq,copyJs,injectHtml,cleanDist,copyAssets,compileAll);
+exports.optimise = series(cleanStyles,fetchModules,copyCss,copyLibCss,copyLibJs,copyLibJq,copyJs,injectHtml,cleanDist,copyAssets,compileAll);
 exports.servedev = series(parallel(copyCss,copyLibCss,copyLibJs,copyLibJq,copyJs,injectHtml),watchJs,watchHtml,watchTasks,liveReload,serveDev); 
