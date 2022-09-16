@@ -9,7 +9,9 @@ module.exports = {
    entry: {
        app: './javascripts/main.js'
    },
-   plugins:[new CopyPlugin(
+   plugins:[
+    
+    new CopyPlugin(
 
     moduleAssets.map(singlemodule => {
         return {from:path.resolve(__dirname,`./node_modules/${singlemodule}`),to: path.resolve(__dirname, './src/lib')}

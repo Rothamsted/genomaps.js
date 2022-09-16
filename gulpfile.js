@@ -42,11 +42,10 @@ function cleanStyles(done) {
 // ** clean Dist
 function cleanDist (done) {
   clean('./dist/*');
-
   done(); 
 };
 
-// copying node_modules from package.Json
+// copying node_modules with webpack 
 async function fetchModules(){
     $.util.log('copying node modules to lib folder')
       webpack(webpackConfig, (err, stats)=> {
@@ -63,24 +62,24 @@ async function fetchModules(){
 // ** Copying bootstrap touchspin styles ** 
 function copyLibCss () {
   return src(config.libCss)
-    .pipe(dest(config.outputLibCss),{append:true});
+    .pipe(dest(config.outputLib),{append:true});
 };
 
-// ** Style Copying ***
+// ** Copying custom styles ***
 function copyCss(){
   return src(config.srcCSS)
     .pipe(dest(config.outputCssDir),{append:true});
 };
 
-// ** Jquery related files copying **
+// ** Copying order required **
 async function copyLibJq(){
   return src(config.libJquery) 
-    .pipe(dest(config.outputLibJq));
+    .pipe(dest(config.outputLib));
 }
 //** non-jquery **
 async function copyLibJs(){
   return src(config.libnoJquery) 
-    .pipe(dest(config.outputLibJs));
+    .pipe(dest(config.outputLib));
 }
 
 // *** JS copying ***

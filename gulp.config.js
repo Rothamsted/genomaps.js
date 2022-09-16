@@ -39,10 +39,7 @@ module.exports = function () {
     injectedHtml: './.tmp/*.html',
     outputCssDir: './.tmp/css/',
     outputJsDir: './.tmp/js/',
-    outputLibJq: './.tmp/lib/',
-    outputLibJs: './.tmp/lib/',
-    outputLibCss: './.tmp/lib/',
-    outputCss: './.tmp/css/*.js',
+    outputLib: './.tmp/lib/',
     outputSvg: './.tmp/assets/*.svg',
 
     build: './dist/',
