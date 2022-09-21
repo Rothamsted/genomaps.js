@@ -52,5 +52,12 @@ GENEMAP.BasemapXmlReader = function () {
       log.info('reading basemap file: ', path);
       return d3.promise.xml(path).then(_readBasemapXML);
     },
+
+    readBasemapXMLFromRawXML: function (xmlStr) {
+      log.info('reading basemap xml');
+      return new Promise(function(resolve, reject){
+    	  resolve(new DOMParser().parseFromString(xmlStr, "application/xml"));
+    	}).then(_readBasemapXML);
+    },
   };
 };
