@@ -1,3 +1,4 @@
+/* globals  module, require, -$ */
 
 module.exports = function () {
   var config = {
@@ -5,28 +6,8 @@ module.exports = function () {
     tmpDir: './.tmp/',
 
     // all the JavaScript files for this project
-    alljs: './src/**/*.js',
-    srcJS: './src/js/*js',
-    srcCSS: './src/css/*css', 
-    libCss: ['./src/lib/jquery.bootstrap-touchspin.css','./src/lib/bootstrap-select.css',
-    ],
-    libJquery:['./src/lib/loglevel.js', 
-    './src/lib/jquery.js',
-    './src/lib/bootstrap.js',
-    './src/lib/bootstrap-select.js',
-    './src/lib/jquery.bootstrap-touchspin.js',
-   ],
-    libnoJquery:['./src/lib/d3.js',
-    './src/lib/lodash.js',
-    './src/lib/d3.promise.js',
-    './src/lib/labella.js',
-    "./src/lib/FileSaver.js",
-    './src/lib/simple_statistics.js', 
-    './src/lib/saveSvgAsPng.js', 
-    './src/lib/es5-shim.js',
-    './src/lib/es6-shim.js',
-    './src/lib/lodash.js'
-  ],
+    alljs: ['./src/**/*.js', './*.js'],
+
     // all the source files
     less: ['./src/less/*.less', '!./src/less/variables.less'],
     html: './src/*.html',
@@ -38,11 +19,18 @@ module.exports = function () {
     allOutputFiles: './.tmp/**/*',
     injectedHtml: './.tmp/*.html',
     outputCssDir: './.tmp/css/',
-    outputJsDir: './.tmp/js/',
-    outputLib: './.tmp/lib/',
+    outputCss: './.tmp/css/*.css',
     outputSvg: './.tmp/assets/*.svg',
 
     build: './dist/',
+
+    // configuration
+    bower: {
+      json: require('./bower.json'),
+      directory: './bower_components/',
+      ignorePath: '../bower_components/',
+    },
+
     svgSpriteConfig: {
       mode: {
         defs: {
@@ -52,6 +40,16 @@ module.exports = function () {
         },
       },
     },
+  };
+
+  config.getWiredepDefaultOptions = function () {
+    var options = {
+      bowerJson: config.bower.json,
+      directory: config.bower.directory,
+      ignorePath: config.bower.ignorePath,
+    };
+
+    return options;
   };
 
   return config;

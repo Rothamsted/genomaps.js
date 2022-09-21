@@ -6,16 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<link href="https://fonts.googleapis.com/css?family=Kanit|Play" rel="stylesheet">
-	<title>GenoMaps.js demo</title>
 
     <!-- build:css styles/genemap-lib.css -->
-    <!-- npm:css -->
-    <!-- endnpm -->
+    <!-- bower:css -->
+    <!-- endbower -->
     <!-- endbuild -->
-
-    <!-- inject:libfiles:css -->
-    <!-- endinject -->
 
     <!-- build:css styles/genemap.css -->
     <!-- inject:css -->
@@ -29,10 +24,6 @@
 
       html, body {
         height: 100%;
-		background-color:#f2f2f2;
-		font-family: 'Play', sans-serif;
-		min-width:960px;
-		margin:0;
       }
 
 
@@ -43,80 +34,20 @@
         margin-top: 50px;
       }
 
-	.navbar {
-	display:block;
-	height:51px;
-	box-shadow: 0 1px 5px;
-	background-color:#2A2A2A;
-	margin-bottom:40px;
-	width:100%;
-	}
-	ul.nav {
-	float:right;
-	list-style:none;
-	}
-	ul {
-	font-size:19px;
-	}
-	.nav a {
-		color: white;
-		text-decoration: none;
-		padding-right: 30px;
-		}
-	.nav a:hover{
-		color: darkorange;
-		}
-	/*Footer*/
-	.contact-footer {
-		background-color:#2A2A2A;
-		color:white;
-		padding-bottom:10px;
-		padding-top:25px;
-		}
-	.contact-footer p {
-		font-size:12px;
-		color:white;
-		}
-	
-	.knetminer-logo {
-		text-align:center;
-		display:block;
-		margin-left:auto;
-		margin-right:auto;
-		
-		}
-	#text-logo {
-		text-align:center;
-		}
-	
-	#content {
-	padding-bottom:30px;
-	margin:auto;
-	width: 80%;
-	}
+
     </style>
 
   </head>
 
   <body>
-	
-     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">	  
-    	<a href="http://knetminer.rothamsted.ac.uk/"><img class="logo-top" src="img/genomaps.jpg" height="48" alt="Logo"></a>   
-       <ul class="nav navbar-nav" id="top">
-          <li><a target="_blank" href="https://github.com/Rothamsted/genomaps.js">GitHub</a>
-          <a target="_blank" href="http://ondex.rothamsted.ac.uk/QTLNetMiner/releasenotes/guides/QTLNetMiner_UserGuide.pdf">User Guide</a></li>
-    </ul>
- 	</nav>  <!-- end navbar -->
-    
-    <div id="content">
-    
+
     <span>Basemap:</span>
 
     <select id="basemap-file" onchange="redraw(false);">
       <option value='arabidopsis'>Arabidopsis</option>
       <option value='arabidopsis2'>Arabidopsis2</option>
       <option value='arabidopsis3'>Arabidopsis3</option>
-      <option selected="selected" value='arabidopsis4'>Arabidopsis4</option>
+      <option value='arabidopsis4'>Arabidopsis4</option>
       <option value='barley'>Barley</option>
       <option value='boleracea'>Boleracea</option>
       <option value='chicken'>Chicken</option>
@@ -124,7 +55,7 @@
       <option value='cow_milk'>Cow - Milk</option>
       <option value='cow_weight'>Cow - Weight</option>
       <option value='maize'>Maize</option>
-      <option value='poplar'>Poplar</option>
+      <option selected="selected" value='poplar'>Poplar</option>
       <option value='poplar2'>Poplar2</option>
       <option value='pig'>Pig</option>
       <option value='potato'>Potato</option>
@@ -134,9 +65,9 @@
       <option value='wheat4'>Wheat4</option>
       <option value='simple'>Simple</option>
     </select>
- 
+
     <span>Show Qtl Labels</span>
-    <select id="show-qtl-labels" disabled onchange="updateLabel();">
+    <select id="show-qtl-labels" onchange="updateLabel();">
       <option value='show'>Show</option>
       <option value='hide'>Hide</option>
       <option value='auto' selected='selected'>Auto</option>
@@ -145,11 +76,11 @@
 
     <span>Num Per Row:</span>
 
-    <input id="chromosome_per_row" disabled type="number" min="1" value="10" style="width:30px;" onclick="redraw();"/>
-    <input id="chk-annotations" disabled type="checkbox" checked="true" onclick="redraw();"> Include Annotations
-    <button disabled onclick="redraw(false)">Draw</button>
-    <button disabled onclick="redraw(true)">Reset Zoom</button>
-    <button disabled onclick="save()">Save</button>
+    <input id="chromosome_per_row" type="number" min="1" value="10" style="width:30px;" onclick="redraw();"/>
+    <input id="chk-annotations" type="checkbox" checked="true" onclick="redraw();"> Include Annotations
+    <button onclick="redraw(false)">Draw</button>
+    <button onclick="redraw(true)">Reset Zoom</button>
+    <button onclick="save()">Save</button>
 
 
     <div id ="wrapper" style = "position: relative; margin-left: auto; margin-right: auto; width: 90%; max-width: 960px; display: block">
@@ -157,11 +88,23 @@
       <p class="lorem-ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent accumsan vitae arcu sit amet elementum. Cras
         imperdiet urna nec orci tempor pulvinar. Curabitur mauris nunc, lacinia et mattis eu, congue sit amet libero.
         Integer eu hendrerit felis, non ultricies metus. Donec venenatis magna ut dui volutpat, a varius mauris
-        pharetra. </p>
+        pharetra. Nunc lacinia erat mi, a aliquet massa ullamcorper eu. Suspendisse auctor nunc vel nibh commodo
+        tincidunt. Quisque nec vestibulum turpis, sit amet posuere lacus. Quisque pretium rutrum urna non sollicitudin.
+        Nam nec dui consequat, sollicitudin magna porttitor, sollicitudin risus.</p>
+
+      <p class="lorem-ipsum">Sed auctor, nisi quis volutpat egestas, massa libero consectetur velit, ac porta erat tellus a enim. Aliquam
+        maximus pharetra tempus. Pellentesque eu finibus ligula, sed accumsan quam. Sed volutpat, nibh et pellentesque
+        rhoncus, metus nisi faucibus enim, sed bibendum ligula sapien et lorem. Donec eget hendrerit orci. Ut et velit
+        at eros efficitur molestie eu sit amet augue. Donec malesuada finibus mi at vehicula. Sed blandit felis ex, eu
+        volutpat justo posuere ac. Suspendisse euismod posuere enim at ullamcorper. Vestibulum egestas mauris eget
+        imperdiet iaculis. Nulla consequat eu libero eget mollis. Sed facilisis nisl at velit condimentum porttitor
+        vitae a ex. Maecenas sollicitudin, nisl vitae pharetra vestibulum, massa mauris sodales ligula, in scelerisque
+        odio ligula ac felis. Phasellus bibendum non turpis nec vestibulum. Sed sed placerat libero.</p>
+
+
 
       <div id="map" class='bootstrap'>
     </div>
-	<br/><br/>
 
       <p class="lorem-ipsum">Suspendisse consequat tristique posuere. Aliquam nisl orci, tincidunt a ligula non, volutpat elementum eros.
         Sed sit amet mattis enim. Integer molestie nisi lacus, at accumsan mauris efficitur a. Praesent in vestibulum
@@ -169,31 +112,33 @@
         congue. Maecenas varius nunc eu diam sagittis, ut sollicitudin arcu rhoncus. Morbi pretium aliquam est vel
         faucibus. Sed rhoncus vel odio a lacinia. Cras ultricies lacus lacus, sit amet cursus odio ornare a. Quisque
         finibus hendrerit est, id viverra lorem fringilla eu. In ut nibh mollis, placerat eros eu, iaculis ligula. Ut
-        hendrerit ante sed urna tincidunt volutpat. </p>
+        hendrerit ante sed urna tincidunt volutpat. Cras velit mauris, aliquam ac pretium non, sagittis nec libero. Sed
+        efficitur rhoncus lacus, eleifend finibus neque ultricies at.</p>
 
       <p class="lorem-ipsum">Sed ultrices quis odio id faucibus. Integer eu sapien in dui blandit dignissim. Nam volutpat massa libero,
         vitae mollis nulla ornare nec. Etiam fringilla ex ut dolor placerat consequat. Nullam tincidunt mi quam, ac
-        pharetra dolor condimentum nec. Morbi ut ligula sed metus interdum aliquam. </p>
+        pharetra dolor condimentum nec. Morbi ut ligula sed metus interdum aliquam. Morbi non enim blandit, venenatis
+        turpis eget, fringilla ligula. Maecenas tempus vel erat ac ultrices. Cras pharetra nisl aliquam augue luctus, eu
+        ultrices tortor scelerisque. Duis nec accumsan dolor. Curabitur aliquet pellentesque dui, in ornare mi.</p>
+
+      <p class="lorem-ipsum">Nullam vestibulum magna quis mattis porttitor. Fusce eu pellentesque diam, a scelerisque augue. Praesent eu
+        accumsan sapien. Nunc vel mollis elit. Vivamus non venenatis diam. Nam eget dui a odio varius malesuada. Nullam
+        vel facilisis velit. Aliquam accumsan, quam id ullamcorper tincidunt, enim tortor euismod quam, at dictum urna
+        dui nec arcu. Integer bibendum lorem nec bibendum commodo. Nam consectetur convallis ipsum, non tincidunt risus
+        vehicula ac. Etiam tristique porttitor tortor, sit amet interdum risus ultricies eget. Nunc fermentum diam ante,
+        condimentum sodales risus posuere interdum. Cras facilisis arcu at tortor tempor condimentum. Nulla id dapibus
+        tortor. Nunc sed ante eget justo luctus laoreet.</p>
     </div>
 
-	</div>   <!-- end content -->
-    
-    <div class="contact-footer"> 
-      	<img class="knetminer-logo" src="img/genomaps.jpg" alt="Logo" with="201.5" height="66.3">
-        <p id="text-logo">Supported by BBSRC SABR and TRDF awards BB/F006039/1 and BB/I023860/1</p> 
-       </div> 
-    
-    <!-- build:js js/genemap-lib.js -->
-    <!-- npm:js -->
-    <!-- endnpm -->
-    <!-- endbuild -->
 
-        <!-- inject:libfiles:js -->
-        <!-- endinject -->
+    <!-- build:js js/genemap-lib.js -->
+    <!-- bower:js -->
+    <!-- endbower -->
+    <!-- endbuild -->
 
     <!-- build:js js/genemap.js -->
     <!-- inject:js -->
-    <!-- endinject -->
+    <!--endinject -->
     <!-- endbuild -->
 
     <script>
