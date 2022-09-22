@@ -445,7 +445,7 @@ GENEMAP.GeneMap = function (userConfig) {
     //console.log("selectedLabels: "+ selectedLabels);
 
     log.info('selected labels: ' + selectedLabels);
-    generateCyJSNetwork(url, { list: selectedLabels, keyword: $('#keywords').val() });
+    generateCyJSNetwork(url, { list: selectedLabels.join ( '\n' ), keyword: $('#keywords').val() });
   };
 
   // toggle the global label visibility, from 'auto', to 'show' and to 'hide'
