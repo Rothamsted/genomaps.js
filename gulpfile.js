@@ -3,6 +3,8 @@
 
 var {series,dest,src,task,parallel,watch}  = require('gulp'),
     args = require('yargs').argv,
+    concat = require('gulp-concat'),
+    ignore = require('gulp-ignore'),
     del = require('del'),
     streamflow = require('stream-series'),
     $ = require('gulp-load-plugins')({lazy:true}),
@@ -32,15 +34,14 @@ task('vet', function () {
 }
 
 // ** clean styles 
-function cleanStyles(done) {
+ function cleanStyles(done) {
   var files = config.tmpDir + '**/*.css';
   clean(files);
-  clean('./src/lib/*');
   done();
 };
 
 // ** clean Dist
-function cleanDist (done) {
+async function cleanDist (done) {
   clean('./dist/*');
   done(); 
 };
@@ -58,124 +59,67 @@ async function fetchModules(){
     })
 }
 
-
 // ** Copying bootstrap touchspin styles ** 
-function copyLibCss () {
+async function copyLibCss(){
   return src(config.libCss)
-    .pipe(dest(config.outputLib),{append:true});
+    .pipe(concat('genomaps-libs.css'))
+    .pipe(dest(config.buildCss),{append:true});
 };
 
 // ** Copying custom styles ***
-function copyCss(){
+async function copyCss(){
   return src(config.srcCSS)
-    .pipe(dest(config.outputCssDir),{append:true});
+  .pipe(concat('genomaps.css'))
+  .pipe(dest(config.buildCss),{append:true});  
 };
 
-// ** Copying order required **
-async function copyLibJq(){
-  return src(config.libJquery) 
-    .pipe(dest(config.outputLib));
+// ** Copying order required libraries **
+async function copyLibJs(){
+  return src(config.libsJs) 
+  .pipe(concat('genomaps-libs.js'))
+    .pipe(dest(config.buildJs, {overwrite:true}))
 }
 //** non-jquery **
-async function copyLibJs(){
-  return src(config.libnoJquery) 
-    .pipe(dest(config.outputLib));
+async function copyLibNoJquery(){
+  return src(config.libsJs)
+  .pipe(ignore.exclude('jquery.js'))
+  .pipe(concat('genomaps-lib-nojquery.js'))
+  .pipe(dest(config.buildJs,{overwrite:true}))
 }
 
-// *** JS copying ***
-function copyJs(){
-  //Copy js into .tmp folder
+// *** custom JS copying ***
+async function copyJs(){
   $.util.log('Moving js files into place');
   return src(config.srcJS)
-    .pipe(dest(config.outputJsDir, {overwrite :true}));
+  .pipe(concat('genomaps.js'))
+  .pipe(dest(config.buildJs, {overwrite : true}))
+
 };
 
 
-// *** HTML injection ***
-function injectHtml() {
-  $.util.log('injecting JavaScript and CSS into the html files');
-  var injectLibStyles = src(config.libCss, { read: false });
-  var injectJqScripts = src(config.libJquery, { read: false });
-  var injectJsibScripts = src(config.libnoJquery, { read: false});
-  var injectStyles = src(config.srcCSS, { read: false });
-  var injectScripts = src(config.js, { read: false });
-  var injectOptions = {ignorePath: ['src', '.tmp'], };
+async function copyAssets(){
+  return src('./assets/img/*', {'base' :'./assets'})
+    .pipe(dest(config.build,{overwrite : true}));
+};
+
+async function copyHtml(){
   return src(config.html)
-    .pipe($.inject(streamflow(injectJqScripts,injectJsibScripts,injectScripts), injectOptions))
-    .pipe($.inject(streamflow(injectLibStyles,injectStyles), injectOptions))
-    .pipe(dest(config.srcDir), {overwrite: false})
-};
-
-// run inject html and copy js
-// parallel('inject-html', copyJs),
-async function watchJs() {
-  return watch(config.js,copyJs);
-};
-
-// run inject-html
- async function watchHtml() {
-  return watch(config.html,series(injectHtml));
-};
-
-// series(parallel('watch-css', 'watch-js', 'watch-html')
-async function watchTasks(){
-  return $.util.log('Watching  styles and js');
-};
-
-async function liveReload() {
-  $.util.log('Connecting live reload');
-  return watch(config.allOutputFiles,  function(){
-    src(config.injectedHtml)
-      .pipe($.connect.reload() );
-  });
-};
-
-
- async function reload() {
-  src(config.injectedHtml)
-    .pipe($.connect.reload() );
+  .pipe(dest(config.build,));
 }
 
-// watch 
-async function serveDev() {
-  $.util.log('Starting serve-dev');
-  return $.connect.server({
-    root: ['.tmp', 'assets', './node_modules', 'test/data', 'test'],
-    port: '8080',
-    livereload: true,
-  });
-};
-
-
-function copyAssets(){
-  return src('./assets/img/*', {'base' :'./assets'})
-    .pipe(dest(config.build));
-};
-
-async function compileAll(){
-  return src(config.injectedHtml)
-    .pipe($.plumber(function (err) {
-      $.util.log(err);
-      this.emit('end');
-    }))
-
-    .pipe($.useref({ searchPath: ['.tmp','./node_modules'] }))
-    .pipe($.if('*.js', $.terser()))
-    .pipe($.if('*.css', $.csso()))
-    .pipe(dest(config.build));
-};
-
-task('serve-prod', series(function(){
+async function launchServer(){
   return $.connect.server({
     root: ['dist', 'test/data'],
     port: '8080',
     livereload: false,
   });
-}));
+};
+
 
 // create a default task and just log a message
 task('help', $.taskListing);
 
 exports.default = task('default', series('help'));
-exports.optimise = series(cleanStyles,fetchModules,copyCss,copyLibCss,copyLibJs,copyLibJq,copyJs,injectHtml,cleanDist,copyAssets,compileAll);
-exports.servedev = series(parallel(copyCss,copyLibCss,copyLibJs,copyLibJq,copyJs,injectHtml),watchJs,watchHtml,watchTasks,liveReload,serveDev); 
+exports.optimise = series(cleanStyles,cleanDist,fetchModules,copyLibCss,copyLibJs,copyLibNoJquery,copyCss,copyJs,copyAssets,copyHtml);
+exports.servedev = series(launchServer)
+

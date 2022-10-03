@@ -21,7 +21,6 @@ var JS = [
 'array-includes/index.js',
 'bootstrap-select/dist/js/bootstrap-select.js'
 ]
-// jquery-ui files missing 
 
 
 module.exports = [...JS,...CSS]

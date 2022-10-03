@@ -1,5 +1,12 @@
 
 module.exports = function () {
+  var libsWithOrder =['./src/lib/loglevel.js', 
+  './src/lib/bootstrap.js',
+  './src/lib/bootstrap-select.js',
+  './src/lib/jquery.bootstrap-touchspin.js',
+ ]
+
+
   var config = {
 
     tmpDir: './.tmp/',
@@ -10,13 +17,10 @@ module.exports = function () {
     srcCSS: './src/css/*css', 
     libCss: ['./src/lib/jquery.bootstrap-touchspin.css','./src/lib/bootstrap-select.css',
     ],
-    libJquery:['./src/lib/loglevel.js', 
-    './src/lib/jquery.js',
-    './src/lib/bootstrap.js',
+    libsJs:['./src/lib/loglevel.js',
+    './src/lib/jquery.js', './src/lib/bootstrap.js',
     './src/lib/bootstrap-select.js',
-    './src/lib/jquery.bootstrap-touchspin.js',
-   ],
-    libnoJquery:['./src/lib/d3.js',
+    './src/lib/jquery.bootstrap-touchspin.js','./src/lib/d3.js',
     './src/lib/lodash.js',
     './src/lib/d3.promise.js',
     './src/lib/labella.js',
@@ -25,8 +29,8 @@ module.exports = function () {
     './src/lib/saveSvgAsPng.js', 
     './src/lib/es5-shim.js',
     './src/lib/es6-shim.js',
-    './src/lib/lodash.js'
-  ],
+    './src/lib/lodash.js'],
+ 
     // all the source files
     less: ['./src/less/*.less', '!./src/less/variables.less'],
     html: './src/*.html',
@@ -42,7 +46,9 @@ module.exports = function () {
     outputLib: './.tmp/lib/',
     outputSvg: './.tmp/assets/*.svg',
 
-    build: './dist/',
+    build: './dist',
+    buildJs:'./dist/js',
+    buildCss:'./dist/css',
     svgSpriteConfig: {
       mode: {
         defs: {

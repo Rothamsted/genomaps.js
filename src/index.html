@@ -9,18 +9,13 @@
 	<link href="https://fonts.googleapis.com/css?family=Kanit|Play" rel="stylesheet">
 	<title>GenoMaps.js demo</title>
 
-    <!-- build:css styles/genemap-lib.css -->
-    <!-- npm:css -->
-    <!-- endnpm -->
-    <!-- endbuild -->
+    
 
     <!-- inject:libfiles:css -->
     <!-- endinject -->
-
-    <!-- build:css styles/genemap.css -->
-    <!-- inject:css -->
-    <!-- endinject -->
-    <!-- endbuild -->
+    <link rel="stylesheet" href="css/genomaps-libs.css">
+    <link rel="stylesheet" href="css/genomaps.css">
+    
 
     <style>
       svg {
@@ -183,19 +178,14 @@
         <p id="text-logo">Supported by BBSRC SABR and TRDF awards BB/F006039/1 and BB/I023860/1</p> 
        </div> 
     
-    <!-- build:js js/genemap-lib.js -->
-    <!-- npm:js -->
-    <!-- endnpm -->
-    <!-- endbuild -->
+    
 
         <!-- inject:libfiles:js -->
         <!-- endinject -->
 
-    <!-- build:js js/genemap.js -->
-    <!-- inject:js -->
-    <!-- endinject -->
-    <!-- endbuild -->
-
+    <script src="js/genomaps-libs.js"></script>
+    <!-- <script src="./dist/js/genomaps-lib-nojquery.js"></script> -->
+    <script src="js/genomaps.js"></script>
     <script>
   log.setDefaultLevel( "info");
 
