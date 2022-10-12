@@ -4,14 +4,17 @@ GENEMAP.vectorEffectSupport = true;
 
 GENEMAP.Listener = function(val){
   var value = val;
-  var listeners = []
+  var listeners = [];
 
   var my = function(val){
     if (!arguments.length) {
       return value;
     }
+    if (val==value) {
+      return value;
+    }
 
-    value = val
+    value = val;
     listeners.forEach(function(listener){
       listener(value) ;
     })
@@ -33,12 +36,13 @@ GENEMAP.Listener = function(val){
 
 GENEMAP.GeneMap = function (userConfig) {
   var defaultConfig = {
+	apiUrl: '/',
     width: '800',
     height: '500',
     svgDefsFile: './assets/sprite-defs.svg',
     layout: {
       margin: { top: 0.05, right: 0.05, bottom: 0.05, left: 0.05 },
-      numberPerRow: 7/*6*/,
+      numberPerRow: /*6*/7,
       maxAnnotationLayers: 3,
     },
     pngScale: 2,
@@ -292,9 +296,11 @@ GENEMAP.GeneMap = function (userConfig) {
 
     var closeFunction = function(event){
       //Exceptions - don't close the popopver we are trying to interact with
-      if (event.target.tagName.toLowerCase() === 'a') {
-        return;
-      }
+	    if (event.target !== 'undefined') {
+				if (event.target.tagName.toLowerCase() === 'a') {
+		    	return;
+				}
+	    }
 
       if ($(event.target).closest('.genemap-advanced-menu').length > 0){
         return;
@@ -422,7 +428,6 @@ GENEMAP.GeneMap = function (userConfig) {
 
   // click handler for the network view button
   var openNetworkView = function () {
-      var gl;
 
     //extract labels for all selected genes on all chromosomes
     var selectedLabels = _.flatMap(genome.chromosomes.map( function(chromosome){
@@ -432,15 +437,15 @@ GENEMAP.GeneMap = function (userConfig) {
         // Use list='' from url (link) instead of gene label.
         var geneURI= gene.link;
         var geneLink= geneURI.substring(geneURI.indexOf("list="), geneURI.length).split("=")[1];
-        return /*gene.label*/geneLink; }) ; }
+        return /*gene.label*/decodeURIComponent(geneLink.replace(/\+/g, ' ')); }) ; }
     ) );
 
-    var url = 'OndexServlet?mode=network&keyword='+$('#keywords').val();
+    var url = config.apiUrl+'/network';
     //console.log("GeneMap: Launch Network for url: "+ url);
     //console.log("selectedLabels: "+ selectedLabels);
 
     log.info('selected labels: ' + selectedLabels);
-    generateCyJSNetwork(url, { list: selectedLabels.join('\n') });
+    generateCyJSNetwork(url, { list: selectedLabels, keyword: $('#keywords').val() });
   };
 
   // toggle the global label visibility, from 'auto', to 'show' and to 'hide'
@@ -821,20 +826,33 @@ GENEMAP.GeneMap = function (userConfig) {
 
   my.draw = function (outerTargetId, basemapPath, annotationPath) {
     var reader = GENEMAP.XmlDataReader();
-    var outerTarget = d3.select(outerTargetId).selectAll('div').data(['genemap-target']);
-
-    outerTarget.enter()
-      .append('div').attr( 'id', function(d){ return d;});
-
-    target = d3.select(outerTargetId).select('#genemap-target')[0][0];
-
+    
     reader.readXMLData(basemapPath, annotationPath).then(function (data) {
-      log.info('drawing genome to target');
-      d3.select(target).datum(data).call(my);
-      my.nGenesToDisplay(config.initialMaxGenes);
-      resetMapZoom();
-      updateLegend(legendSpan, genome)
+	    my._draw(outerTargetId, data);
     });
+  };
+  
+  my.drawFromRawAnnotationXML = function(outerTargetId, basemapPath, annotationXMLString) {
+    var reader = GENEMAP.XmlDataReader();
+    
+    reader.readXMLDataFromRawAnnotationXML(basemapPath, annotationXMLString).then(function (data) {
+    	my._draw(outerTargetId, data);
+    });
+  };
+  
+  my._draw = function(outerTargetId, data) {
+	  var outerTarget = d3.select(outerTargetId).selectAll('div').data(['genemap-target']);
+
+	  outerTarget.enter()
+	    .append('div').attr( 'id', function(d){ return d;});
+
+	  target = d3.select(outerTargetId).select('#genemap-target')[0][0];
+
+	  log.info('drawing genome to target');
+	  d3.select(target).datum(data).call(my);
+	  my.nGenesToDisplay(config.initialMaxGenes);
+	  resetMapZoom();
+	  updateLegend(legendSpan, genome);
   };
 
   my.redraw = function (outerTarget) {
