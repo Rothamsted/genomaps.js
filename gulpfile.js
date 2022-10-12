@@ -1,11 +1,13 @@
 /* Remove jQuery as $ so it can be used by gulp-load-plugins */
 /* globals require, -$ */
 
-var {series,dest,src,task,parallel,watch}  = require('gulp'),
+var {series,dest,src,task}  = require('gulp'),
     args = require('yargs').argv,
     concat = require('gulp-concat'),
     ignore = require('gulp-ignore'),
     del = require('del'),
+    terser = require('gulp-terser'),
+    rename = require('gulp-rename'),
     streamflow = require('stream-series'),
     $ = require('gulp-load-plugins')({lazy:true}),
     config = require('./gulp.config')();
@@ -39,6 +41,16 @@ task('vet', function () {
   clean(files);
   done();
 };
+
+// util function to rename,concat and minify javascript files
+function processJs(fileLocation, fileName){
+  return src(fileLocation) 
+    .pipe(concat(`${fileName}.js`))
+    .pipe(dest(config.buildJs, {overwrite:true}))
+    .pipe(rename(`${fileName}.min.js`))
+    .pipe(terser())
+    .pipe(dest(config.buildJs, {overwrite:true}))
+}
 
 // ** clean Dist
 async function cleanDist (done) {
@@ -75,25 +87,31 @@ async function copyCss(){
 
 // ** Copying order required libraries **
 async function copyLibJs(){
-  return src(config.libsJs) 
-  .pipe(concat('genomaps-libs.js'))
-    .pipe(dest(config.buildJs, {overwrite:true}))
+  $.util.log('Moving js lib unordered files into place');
+  processJs(config.libsJs, 'genomaps-libs')
 }
+
+async function copyLibOrderJs(){
+  $.util.log('Moving js lib ordered files into place');
+  processJs(config.libsOrderJs,'genomaps-libs-order')
+}
+
 //** non-jquery **
 async function copyLibNoJquery(){
-  return src(config.libsJs)
+  return src(config.libsOrderJs)
   .pipe(ignore.exclude('jquery.js'))
-  .pipe(concat('genomaps-lib-nojquery.js'))
-  .pipe(dest(config.buildJs,{overwrite:true}))
+  .pipe(concat('genomaps-libsorder-nojquery.js'))
+  .pipe(dest(config.buildJs, {overwrite:true}))
+  .pipe(rename('genomaps-libsorder-nojquery.min.js'))
+  .pipe(terser())
+  .pipe(dest(config.buildJs, {overwrite:true}))
 }
+
 
 // *** custom JS copying ***
 async function copyJs(){
   $.util.log('Moving js files into place');
-  return src(config.srcJS)
-  .pipe(concat('genomaps.js'))
-  .pipe(dest(config.buildJs, {overwrite : true}))
-
+  processJs(config.srcJS,'genomaps')
 };
 
 
@@ -120,6 +138,6 @@ async function launchServer(){
 task('help', $.taskListing);
 
 exports.default = task('default', series('help'));
-exports.optimise = series(cleanStyles,cleanDist,fetchModules,copyLibCss,copyLibJs,copyLibNoJquery,copyCss,copyJs,copyAssets,copyHtml);
+exports.optimise = series(cleanStyles,cleanDist,fetchModules,copyLibCss,copyLibJs,copyLibOrderJs,copyLibNoJquery,copyCss,copyJs,copyAssets,copyHtml);
 exports.servedev = series(launchServer)
 
