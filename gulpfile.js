@@ -59,16 +59,21 @@ async function cleanDist (done) {
 };
 
 // copying node_modules with webpack 
-async function fetchModules(){
+ async function fetchModules(cb){
+    await clean('./src/lib/*')
     $.util.log('copying node modules to lib folder')
-      webpack(webpackConfig, (err, stats)=> {
+       webpack(webpackConfig, (err, stats)=> {
       if(err){
         return reject(err)
       }
       if(stats.hasErrors()){
         return reject(new Error(stats.compilation.errors.join('.\n')))
+      }else{
+        cb();
       }
     })
+
+  
 }
 
 // ** Copying bootstrap touchspin styles ** 
@@ -138,6 +143,7 @@ async function launchServer(){
 task('help', $.taskListing);
 
 exports.default = task('default', series('help'));
-exports.optimise = series(cleanStyles,cleanDist,fetchModules,copyLibCss,copyLibJs,copyLibOrderJs,copyLibNoJquery,copyCss,copyJs,copyAssets,copyHtml);
+exports.fetchModules = series(fetchModules)
+exports.optimise = series(cleanStyles,cleanDist,copyLibCss,copyLibJs,copyLibOrderJs,copyLibNoJquery,copyCss,copyJs,copyAssets,copyHtml)
 exports.servedev = series(launchServer)
 
