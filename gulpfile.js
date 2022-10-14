@@ -68,18 +68,17 @@ async function cleanDist (done) {
       }
       if(stats.hasErrors()){
         return reject(new Error(stats.compilation.errors.join('.\n')))
-      }else{
-        cb();
       }
+      cb()
     })
 
   
 }
 
-// ** Copying bootstrap touchspin styles ** 
+// ** Copying bootstrap and jquery styles ** 
 async function copyLibCss(){
   return src(config.libCss)
-    .pipe(concat('genomaps-libs.css'))
+    .pipe(concat('jquery-bstrap.css'))
     .pipe(dest(config.buildCss),{append:true});
 };
 
@@ -90,24 +89,25 @@ async function copyCss(){
   .pipe(dest(config.buildCss),{append:true});  
 };
 
-// ** Copying order required libraries **
+// ** Copying node dependencies d3,lodash, Filesaver ... **
 async function copyLibJs(){
   $.util.log('Moving js lib unordered files into place');
-  processJs(config.libsJs, 'genomaps-libs')
+  processJs(config.libsJs, 'genomaps-libs');
 }
 
-async function copyLibOrderJs(){
+// ** Copying Boostrap and Jquery related dependencies where ordering is required **
+async function copyJqueryBstrapJs(){
   $.util.log('Moving js lib ordered files into place');
-  processJs(config.libsOrderJs,'genomaps-libs-order')
+  processJs(config.libsOrderJs,'jquery-bstrap')
 }
 
-//** non-jquery **
-async function copyLibNoJquery(){
+//** Copying a replicate of jquery-bstrap.js file without Jquery **
+async function copyNoJquery(){
   return src(config.libsOrderJs)
   .pipe(ignore.exclude('jquery.js'))
-  .pipe(concat('genomaps-libsorder-nojquery.js'))
+  .pipe(concat('nonjquery-bstrap.js'))
   .pipe(dest(config.buildJs, {overwrite:true}))
-  .pipe(rename('genomaps-libsorder-nojquery.min.js'))
+  .pipe(rename('nonjquery-bstrap.js.min.js'))
   .pipe(terser())
   .pipe(dest(config.buildJs, {overwrite:true}))
 }
@@ -119,17 +119,19 @@ async function copyJs(){
   processJs(config.srcJS,'genomaps')
 };
 
-
+// *** copying images 
 async function copyAssets(){
   return src('./assets/img/*', {'base' :'./assets'})
     .pipe(dest(config.build,{overwrite : true}));
 };
 
+// ** Copying Html file to dist **
 async function copyHtml(){
   return src(config.html)
   .pipe(dest(config.build,));
 }
 
+// launching dev server
 async function launchServer(){
   return $.connect.server({
     root: ['dist', 'test/data'],
@@ -144,6 +146,6 @@ task('help', $.taskListing);
 
 exports.default = task('default', series('help'));
 exports.fetchModules = series(fetchModules)
-exports.optimise = series(cleanStyles,cleanDist,copyLibCss,copyLibJs,copyLibOrderJs,copyLibNoJquery,copyCss,copyJs,copyAssets,copyHtml)
+exports.optimise = series(cleanStyles,cleanDist,copyLibCss,copyLibJs,copyJqueryBstrapJs,copyNoJquery,copyCss,copyJs,copyAssets,copyHtml)
 exports.servedev = series(launchServer)
 

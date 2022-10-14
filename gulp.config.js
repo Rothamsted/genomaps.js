@@ -33,7 +33,7 @@ module.exports = function () {
    './src/lib/saveSvgAsPng.js', 
    './src/lib/es5-shim.js',
    './src/lib/es6-shim.js',
-   './src/lib/lodash.js'],
+   ],
  
     // all the source files
     less: ['./src/less/*.less', '!./src/less/variables.less'],
