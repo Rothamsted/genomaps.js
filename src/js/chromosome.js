@@ -24,6 +24,8 @@ GENEMAP.Chromosome = function (userConfig) {
 
   // function to update a single chromosome element given the enter + update selection
   // and data. This assumes the basic element structure is in place.
+
+
   var updateChromosome = function (chromosome) {
     var y = buildYScale();
     var height = y(chromosome.length);
@@ -148,17 +150,15 @@ GENEMAP.Chromosome = function (userConfig) {
 
     // setup the chromosome bands
     var bandsContainer = chromosomeGroup.select('.bands_container');
-
-    var drawBands;
-    if (config.bands == "basemap"){
-      drawBands = drawBasemapBands;
-    }
-    else if (config.bands == "genes"){
-      drawBands = drawGeneLines;
-    }
+      var drawBands;
+        if (config.bands == "basemap"){
+          drawBands = drawBasemapBands;
+        }
+        else if (config.bands == "genes"){
+          drawBands = drawGeneLinesAndBands;
+        }
 
     drawBands( bandsContainer, chromosome);
-
     chromosomeGroup.select('.bands_container').style({
       mask: 'url(#chromosome_mask_' + chromosome.number + ')',
     });
@@ -168,6 +168,7 @@ GENEMAP.Chromosome = function (userConfig) {
 
     var y = buildYScale();
     var bands = bandsContainer.selectAll('rect.band').data(chromosome.bands);
+    console.log(chromosome.bands);
     bands.enter().append('rect').attr('class', 'band');
 
     bands.attr({
@@ -204,10 +205,12 @@ GENEMAP.Chromosome = function (userConfig) {
     return result;
   }
 
-  var drawGeneLines = function( bandsContainer, chromosome){
+  var drawGeneLinesAndBands = function( bandsContainer, chromosome){
 
     var y = buildYScale();
-    var bands = bandsContainer.selectAll('rect.band').data(chromosome.layout.geneBandNodes);
+    var bandsRect = bandsContainer.selectAll('rect.band'); 
+    var bands = bandsRect.data(chromosome.layout.geneBandNodes);
+   
     bands.enter().append('rect').attr({
       'id': function(d){ return d.data.id},
       'class': 'band geneline infobox'
@@ -222,6 +225,20 @@ GENEMAP.Chromosome = function (userConfig) {
      return d.data.selected
     }
     );
+
+    // adding basempsbands 
+    var baseBands = bandsRect.data(chromosome.bands);
+     baseBands.attr({
+      width: config.layout.width,
+      y: function (d) { return y(d.start); },
+      height: function (d) { return y(d.end - d.start); },
+      fill: function (d) { return d.color; },
+    });
+
+    
+   
+
+   
 
     bands.on('click', function (d) {
       //If user clicks on a gene, toggle gene selection
@@ -323,6 +340,7 @@ GENEMAP.Chromosome = function (userConfig) {
   };
 
   my.bands = function (value) {
+   
     if (!arguments.length) {
       return config.bands;
     }
