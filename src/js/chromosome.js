@@ -24,68 +24,66 @@ GENEMAP.Chromosome = function (userConfig) {
 
   // function to update a single chromosome element given the enter + update selection
   // and data. This assumes the basic element structure is in place.
-
-
-  var updateChromosome = function (chromosome) {
-    var y = buildYScale();
-    var height = y(chromosome.length);
-    var chromosomeGroup = d3.select(this);
-
-    chromosomeGroup.attr({
-      id: 'chromosome_' + chromosome.number,
-      transform: 'translate(' + config.layout.x + ',' + config.layout.y + ')',
-    });
-
-    chromosomeGroup.select('defs').html('')
-      .append('mask').attr({
-        id: 'chromosome_mask_' + chromosome.number,
-      })
-      .append('rect').attr({
-        class: 'mask_rect',
-      });
-
-    chromosomeGroup.select('#chromosome_mask_' + chromosome.number).attr({
-      width: config.layout.width,
-      height: height,
-    });
-
-    var chromosomeShape = {
-      width: config.layout.width,
-      height: height,
-      rx: Math.min(config.layout.width * 0.25, config.layout.height* 0.01),
-      ry: Math.min(config.layout.width * 0.25, config.layout.height* 0.01),
-    };
-
-    chromosomeGroup.select('.mask_rect').attr(chromosomeShape);
-    chromosomeGroup.select('rect.background').attr(chromosomeShape);
-    chromosomeGroup.select('rect.outline').attr(chromosomeShape);
-
-    var selection = [];
-
-    var updateSelection = function(){
-
-      var gSelect = chromosomeGroup.selectAll('rect.selection').data(selection);
-
-      gSelect.enter()
-        .append('rect')
-        .attr( 'class', 'selection')
-        .style( {
-          'fill' : 'gray',
-          'opacity' : 0.2,
-        });
-
-      gSelect
-        .attr( {
-          'x': 0,
-          'y': function(d){ return Math.min(d.start, d.end)},
-          'width': config.layout.width,
-          'height': function(d){ return Math.abs(d.end - d.start)},
-        });
-
-      gSelect.exit()
-        .remove();
-    }
-
+  var updateChromosome = function (chromosome) 
+  {
+	  var y = buildYScale();
+	  var height = y(chromosome.length);
+	  var chromosomeGroup = d3.select(this);
+	
+	  chromosomeGroup.attr({
+	    id: 'chromosome_' + chromosome.number,
+	    transform: 'translate(' + config.layout.x + ',' + config.layout.y + ')',
+	  });
+	
+		chromosomeGroup.select('defs').html('')
+	  .append('mask').attr({
+	    id: 'chromosome_mask_' + chromosome.number,
+	  })
+	  .append('rect').attr({
+	    class: 'mask_rect',
+	  });
+	
+	  chromosomeGroup.select('#chromosome_mask_' + chromosome.number).attr({
+	    width: config.layout.width,
+	    height: height,
+	  });
+	
+	  var chromosomeShape = {
+	    width: config.layout.width,
+	    height: height,
+	    rx: Math.min(config.layout.width * 0.25, config.layout.height* 0.01),
+	    ry: Math.min(config.layout.width * 0.25, config.layout.height* 0.01),
+	  };
+	
+	  chromosomeGroup.select('.mask_rect').attr(chromosomeShape);
+	  chromosomeGroup.select('rect.background').attr(chromosomeShape);
+	  chromosomeGroup.select('rect.outline').attr(chromosomeShape);
+	
+	  var selection = [];
+	
+	  var updateSelection = function()
+	  {
+	
+	    var gSelect = chromosomeGroup.selectAll('rect.selection').data(selection);
+	
+	    gSelect.enter()
+	      .append('rect')
+	      .attr( 'class', 'selection')
+	      .style( {
+	        'fill' : 'gray',
+	        'opacity' : 0.2,
+	      });
+	
+	    gSelect.attr( {
+        'x': 0,
+        'y': function(d){ return Math.min(d.start, d.end)},
+        'width': config.layout.width,
+        'height': function(d){ return Math.abs(d.end - d.start)},
+	     });
+	
+	    gSelect.exit()
+	    .remove();
+	  }
 
     var drag = d3.behavior.drag()
       .on( 'dragstart', function(event){
@@ -150,7 +148,8 @@ GENEMAP.Chromosome = function (userConfig) {
 
     // setup the chromosome bands
     var bandsContainer = chromosomeGroup.select('.bands_container');
-      var drawBands;
+      
+    var drawBands;
         if (config.bands == "basemap"){
           drawBands = drawBasemapBands;
         }
@@ -162,7 +161,7 @@ GENEMAP.Chromosome = function (userConfig) {
     chromosomeGroup.select('.bands_container').style({
       mask: 'url(#chromosome_mask_' + chromosome.number + ')',
     });
-  };
+  }; // updateChromosome
 
   var drawBasemapBands = function( bandsContainer, chromosome){
 
@@ -234,10 +233,6 @@ GENEMAP.Chromosome = function (userConfig) {
       height: function (d) { return y(d.end - d.start); },
       fill: function (d) { return d.color; },
     });
-
-    
-   
-
    
 
     bands.on('click', function (d) {
