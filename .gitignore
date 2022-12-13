@@ -1,6 +1,8 @@
 node_modules
 bower_components/
 .tmp/
+dist/
+src/lib/
 .DS_Store
 .project
 .settings

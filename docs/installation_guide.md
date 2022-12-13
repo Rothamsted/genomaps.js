@@ -4,24 +4,26 @@
 ### First time install
 - Install Node.js (https://nodejs.org/en/download/) & NPM
 - Install Git (https://git-scm.com/)
-- Install bower: `npm install -g bower`
-- Install gulp: `npm install -g gulp`
-- Note: Our test environment uses `npm 6.1.0 , bower 1.8.4, gulp 1.8.4`, but newer versions of bower/gulp should work too. 
+- Install all dependencies: `npm install `
+- Note: Our test environment uses `npm 8.10.0 , webpack 4.44.2, gulp 4.0.2`. 
+
+## To test Genomap.js:
+
+After running, ```npm install``` in genomap.js directory, run ```npm run dev``` and navigate to <http://localhost:8080/> to run the demo page.
 
 ### Building the compressed and minified files
 
-The required files 'genemap.js', 'genemap-lib.js', 'genemap-lib.css' and 'genemap.css' as well as the images are found in the 'dist' directory, which isnt currently checked into version control. They will need to be recompiled before they can be used, to do this you can use the following steps. Once after checkout go to the `GeneMap` directory and run:
+The required files 'genemap.js', 'genemap-lib.js',  'jquery-bstrap.js', 'jquery-bstrap.css' and 'genemap.css' as well as the images are found in the 'dist' directory, which isnt currently checked into version control. They will need to be recompiled before they can be used, to do this you can use the following steps.:
 
-    npm install
-    bower install
+    npm run build
 
 To install the dependencies then you can run:
 
-    gulp optimise
+  npm run dev
 
 To re-build the files in the `dist` folder.
 
-More information about npm, bower and gulp can be found in the maintenance guide.
+More information about npm and gulp can be found in the maintenance guide.
 
 ## General Installation Notes
 
@@ -29,20 +31,24 @@ This is a guide to using the GeneMap component, not necessarily within the QTLNe
 
 ### Required files
 
-Currently there are quire a few depenancies in the form of CSS and Javascript files. Combined and minified versions of these files should be in the `GeneMap` directory, if they aren't they can be re-built following the instructions in the 'Building the compressed and minified files' section.
+Currently there are quire a few depenancies in the form of CSS and Javascript files. Combined and minified versions of these files should be in the `dist` directory, if they aren't they can be re-built following the instructions in the 'Building the compressed and minified files' section.
 
 
 The required files are (relative to the root of the 'GeneMap' folder:
 
   * `./dist/js/genemap-lib.js`
+  * `./dist/js/jquery-bstrap.js`
   * `./dist/js/genemap.js`
   * `./dist/css/genemap.css`
+  * `./dist/css/jquery-bstrap.css`
 
 The JavaScript and CSS files need to be included on the page:
 
     <script src="./dist/js/genemap-lib.js"></script>
+    <script src="./dist/js/jquery-bstrap.js"></script>
     <script src="./dist/js/genemap.js"></script>
-
+    
+    <link rel="stylesheet" href="./dis/styles/jquery-bstrap.css">
     <link rel="stylesheet" href="./dis/styles/genemap.css">
 
 
@@ -87,10 +93,6 @@ There are a limited number of rendering options available on the chart object, t
 
  - D3 doesn't seem to be very good about raising errors when it can't read an XML file, if you are having problems check the XML files being read are valid (no extra & characters for example). This should be easy enough to do by trying to open the XML file in a browser.
  - Check the head contains the `<meta charset="UTF-8">` tag as d3 uses UTF8.
-
-## To test Genomap.js:
-After running, ```npm install```, ```bower install``` and ```gulp optimise``` in genomap.js directory, run ```gulp serve-dev``` and navigate to <http://localhost:8080/index.html> to run the demo page.
-
 
 
 **IMP:** If `bower` install throws npm error, add: `npm config set unsafe-perm true` before doing: `npm install bower gulp -g`.

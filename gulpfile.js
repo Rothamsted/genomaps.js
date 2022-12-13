@@ -1,21 +1,15 @@
 /* Remove jQuery as $ so it can be used by gulp-load-plugins */
 /* globals require, -$ */
 
-var {series,dest,src,task}  = require('gulp'),
+var {series,dest,src,task,watch}  = require('gulp'),
     args = require('yargs').argv,
     concat = require('gulp-concat'),
     ignore = require('gulp-ignore'),
     del = require('del'),
     terser = require('gulp-terser'),
     rename = require('gulp-rename'),
-    streamflow = require('stream-series'),
     $ = require('gulp-load-plugins')({lazy:true}),
     config = require('./gulp.config')();
-
-    // webpack config 
-    var webpack = require('webpack'), 
-    webpackConfig = require("./webpack.config");
-      
 
 // *** Code analysis ***
 task('vet', function () {
@@ -53,27 +47,11 @@ function processJs(fileLocation, fileName){
 }
 
 // ** clean Dist
-async function cleanDist (done) {
+async function cleanDist(done) {
   clean('./dist/*');
   done(); 
 };
 
-// copying node_modules with webpack 
- async function fetchModules(cb){
-    await clean('./src/lib/*')
-    $.util.log('copying node modules to lib folder')
-       webpack(webpackConfig, (err, stats)=> {
-      if(err){
-        return reject(err)
-      }
-      if(stats.hasErrors()){
-        return reject(new Error(stats.compilation.errors.join('.\n')))
-      }
-      cb()
-    })
-
-  
-}
 
 // ** Copying bootstrap and jquery styles ** 
 async function copyLibCss(){
@@ -85,14 +63,14 @@ async function copyLibCss(){
 // ** Copying custom styles ***
 async function copyCss(){
   return src(config.srcCSS)
-  .pipe(concat('genomaps.css'))
+  .pipe(concat('genemap.css'))
   .pipe(dest(config.buildCss),{append:true});  
 };
 
 // ** Copying node dependencies d3,lodash, Filesaver ... **
 async function copyLibJs(){
   $.util.log('Moving js lib unordered files into place');
-  processJs(config.libsJs, 'genomaps-libs');
+  processJs(config.libsJs, 'genemap-lib');
 }
 
 // ** Copying Boostrap and Jquery related dependencies where ordering is required **
@@ -116,7 +94,7 @@ async function copyNoJquery(){
 // *** custom JS copying ***
 async function copyJs(){
   $.util.log('Moving js files into place');
-  processJs(config.srcJS,'genomaps')
+  processJs(config.srcJS,'genemap')
 };
 
 // *** copying images 
@@ -136,16 +114,18 @@ async function launchServer(){
   return $.connect.server({
     root: ['dist', 'test/data'],
     port: '8080',
-    livereload: false,
+    livereload: true,
   });
 };
+
+
+
 
 
 // create a default task and just log a message
 task('help', $.taskListing);
 
 exports.default = task('default', series('help'));
-exports.fetchModules = series(fetchModules)
 exports.optimise = series(cleanStyles,cleanDist,copyLibCss,copyLibJs,copyJqueryBstrapJs,copyNoJquery,copyCss,copyJs,copyAssets,copyHtml)
 exports.servedev = series(launchServer)
 

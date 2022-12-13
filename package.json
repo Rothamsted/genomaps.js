@@ -137,6 +137,7 @@
     "> 5%"
   ],
   "scripts": {
-    "webpack": "webpack"
+    "build": "webpack && gulp optimise",
+    "dev": "gulp optimise && gulp servedev"
   }
 }
