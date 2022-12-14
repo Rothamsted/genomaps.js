@@ -1,6 +1,8 @@
 # Genomaps.js Use Guide
 
-This document describes how to deploy and configure Genomaps.js on your own application. We cover code and development details [elsewhere][TODO].
+This document describes how to deploy and configure Genomaps.js on your own application. We cover code and development details [elsewhere](DevGuide.md).
+
+See also [this document](customisation.md) for further use details and customisation options.
 
 ## Linking Genomaps.js in your project
 

@@ -1,17 +1,4 @@
-# Behaviour
-
-##Contents
-
-These sections are more like a user guide:
-
-- [Visualisation Features](#visualisation-features)
-- [Annotation Visibility and Selections](#annotation-visibility-and-selections)
-- [User Interaction](#user-interaction)
-
-These sections provide more background information on how the visualisation is done:
-
-- [Color](#color)
-- [Layout](#layout)
+# Genomaps.js Customisation
 
 ## Visualisation Features 
 
