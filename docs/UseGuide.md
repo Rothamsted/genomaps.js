@@ -6,13 +6,13 @@ See also [this document](customisation.md) for further use details and customisa
 
 ## Linking Genomaps.js in your project
 
-The recommended way to link Genomaps to your project is using NPM. For instance, genompas, can be used as a dependency in a `package.json` file, using its github URL:
+The recommended way to link Genomaps to your project is using NPM. For instance, genomaps, can be used as a dependency in a `package.json` file, using its github URL:
 
 ```javascript
 package.json
 ...
 dependencies {
-  "genompas": "https://github.com/Rothamsted/genomaps.js.git#202210_refactor"
+  "genomaps": "https://github.com/Rothamsted/genomaps.js.git#202210_refactor"
 }
 ```
 
@@ -54,11 +54,37 @@ Also, note that the CSS uses a '.bootstrap' class to namespace all the bootstrap
 
 ## Basemap file
 
-Genomaps.js needs an XML file, named base map, which describes the organism chromosome to be visualised...
+Genomaps.js needs an XML file that describes the organism chromosome to be visualised. The file houses a genome object and chromosome bands that should be displayed. Below is a sample basemap.xml currently utilised in Knetminer:
+
+```xml
+<genome>
+<chromosome index="1" length="30427671" number="1">
+<band index="1">
+<start>0</start>
+<end>30427671</end>
+<color>0xFFFFFF</color>
+</band>
+</chromosome>
+<chromosome index="2" length="19698289" number="2">
+...
+</chromosome>
+<chromosome index="3" length="23459830" number="3">
+...
+</chromosome>
+<chromosome index="4" length="18585056" number="4">
+...
+</chromosome>
+<chromosome index="5" length="26975502" number="5">
+...
+</chromosome>
+</genome>
+```
 
 * TODO: point to an example, say to look at the details for how its syntax, point to out scripts to build it, point to the files we already have (in knetminer)
 
 ## Input data
+
+Basemaps are provided to the Genomaps object as a path url that returns an XML file with a genome root element. In Knetminer basemaps are served from our API endpoint and detailed explaination on how the path url should be structured can be found in the `Generating Genomaps.js` section below.
 * TODO: describe the input, or point to examples from knetminer.com
 
 
@@ -81,8 +107,13 @@ The `basemapPath` and `annotationsPath` variable need to include a path to the b
 
 ### Selecting the basemap file
 
-* TODO: describe how the default location can be changed, show examples from knetminer
+`basemapPath` can be dynamically served when multiple species are present in a data instance. In Knetminer basemaps are selected based on a species [TaxonomyID][L.21], for example the taxnomy ID for `Arabidopsis thaliana` is `3702` and to get the basemap.xml related to it in Knetminer, a `taxID` params is appended to the `basemapPath` and will look like:
+	
+	var baseMapUrl = api_url/dataset-route/basemap.xml?taxId=3702;
 
+[L.21]:https://www.ncbi.nlm.nih.gov/taxonomy/?term=3702
+
+* TODO: describe how the default location can be changed, show examples from knetminer.
 
 ### Redraw on window re-size
 
