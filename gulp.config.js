@@ -37,19 +37,22 @@ module.exports = function () {
  
     // all the source files
     less: ['./src/less/*.less', '!./src/less/variables.less'],
-    html: './src/*.html',
+    srcDir: './src/',
     js: './src/js/*.js',
     svg: './assets/svg/*.svg',
 
     // the development output
     srcDir: './.tmp/',
     allOutputFiles: './.tmp/**/*',
-    injectedHtml: './.tmp/*.html',
+    distHtml: './src/index.html',
+    devHtml: './src/index-dev.html',
     outputCssDir: './.tmp/css/',
     outputJsDir: './.tmp/js/',
     outputLib: './.tmp/lib/',
     outputSvg: './.tmp/assets/*.svg',
+    xmlFiles: './test/data/**/*.xml',
 
+    // production output
     build: './dist',
     buildJs:'./dist/js',
     buildCss:'./dist/css',

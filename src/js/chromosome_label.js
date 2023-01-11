@@ -36,7 +36,7 @@ GENEMAP.ChromosomeLabel = function (userConfig) {
     }
   }
 
-  function my(selection) {
+  function my(selection){
     selection.each(function (d) {
 
       //CHROMOSOME NUMBER
@@ -104,7 +104,6 @@ GENEMAP.ChromosomeLabel = function (userConfig) {
       // remove any missing elements
       sizeLabelGroup.exit().remove();
     });
-
   }
 
   my.longestChromosome = function (value) {
