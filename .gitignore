@@ -1,7 +1,7 @@
 node_modules
 bower_components/
 .tmp/
-src/lib/
+src/lib/**
 .DS_Store
 .project
 .settings

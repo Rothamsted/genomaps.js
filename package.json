@@ -29,7 +29,7 @@
     },
     {
       "name": "Marco Brandizi"
-    }
+    },
     {
       "name": "Francis Newson",
       "email": "francis.newson@tessella.com"
@@ -143,7 +143,9 @@
     "> 5%"
   ],
   "scripts": {
-    "build": "webpack && gulp optimise",
-    "dev": "gulp optimise && gulp servedev"
+    "start": "webpack && gulp optimise",
+    "build": "gulp optimise && gulp prodbuild",
+    "build:serve": "gulp prodbuild",
+    "dev:watch" : "gulp buildDev"
   }
 }
