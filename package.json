@@ -59,15 +59,18 @@
     "biojs"
   ],
   "engines": {
-    "node": "16.17.1",
-    "npm": "8.19.2"
+    "node": "18.14.0",
+    "npm": "9.3.1"
   },
   "directories": {
     "doc": "docs",
     "test": "test"
   },
+  "files": [
+	  "dist",
+	  "docs"
+  ],
   "dependencies": {
-    "array-includes": "^1.0.0",
     "bootstrap": "^3.3.6",
     "bootstrap-select": "^1.11.0",
     "bootstrap-touchspin": "~3.1.1",

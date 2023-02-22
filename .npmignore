@@ -1,5 +1,4 @@
 node_modules/*
-bower_components/
 .tmp/
 assets/
 dev/
@@ -8,4 +7,3 @@ src/
 stylesheets/
 javascripts/
 test/
-
