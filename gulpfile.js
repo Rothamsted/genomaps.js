@@ -145,7 +145,7 @@ function copyHtml(fileLocation, outputLocation){
 async function launchProdServer(){
   return $.connect.server({
     root: ['dist', 'test/data'],
-    port: '8080',
+    port: '8000',
     livereload: false,
   });
 };
@@ -184,7 +184,7 @@ function watchFiles(cb){
 task('help', $.taskListing);
 
 exports.default = task('default', series('help'));
-exports.optimise = series(coreTasks)
-exports.prodbuild = series(launchProdServer)
-exports.buildDev = parallel(series(coreTasks,series(launchDevServer)),series(watchFiles))
+exports.build = series(coreTasks)
+exports.demo = series(launchProdServer)
+exports.demoDev = parallel(series(coreTasks,series(launchDevServer)),series(watchFiles))
 

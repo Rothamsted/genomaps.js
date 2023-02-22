@@ -143,9 +143,9 @@
     "> 5%"
   ],
   "scripts": {
-    "start": "webpack && gulp optimise",
-    "build": "gulp optimise && gulp prodbuild",
-    "build:serve": "gulp prodbuild",
-    "dev:watch" : "gulp buildDev"
+	  "clean": "rm -Rf node_modules dist .tmp",
+    "build": "npm install && webpack && gulp build",
+    "demo": "gulp demo",
+    "demoDev" : "gulp demoDev"
   }
 }
