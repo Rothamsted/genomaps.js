@@ -12,16 +12,16 @@ The recommended way to link Genomaps to your project is using NPM. For instance,
 package.json
 ...
 dependencies {
-  "genomaps": "https://github.com/Rothamsted/genomaps.js.git#202210_refactor"
+  "genomaps": "https://github.com/Rothamsted/genomaps.js.git#2.0"
 }
 ```
 
-You can use a specific version or branch name after the '#'. TODO: we plan to support the NPM hub in future.
+You can use a specific version or branch name after the '#'. This must correspond to a tag or a branch on github. TODO: we plan to support the NPM hub in future.
 
 If you want to download runtime dependencies in your web project (which doesn't use NPM at runtime), you can use NPM from the command line:
  
 ```bash
-$ npm pack -w 'https://github.com/Rothamsted/genomaps.js.git#202210_refactor'
+$ npm pack -w 'https://github.com/Rothamsted/genomaps.js.git#2.0'
 $ tar xv --gzip -f genomaps-*.tgz
 ```
 
@@ -57,26 +57,27 @@ Also, note that the CSS uses a '.bootstrap' class to namespace all the bootstrap
 Genomaps.js needs an XML file that describes the organism chromosome to be visualised. The file houses a genome object and chromosome bands that should be displayed. Below is a sample basemap.xml currently utilised in Knetminer:
 
 ```xml
+<?xml version="1.0" encoding="UTF-8"?>
 <genome>
-<chromosome index="1" length="30427671" number="1">
-<band index="1">
-<start>0</start>
-<end>30427671</end>
-<color>0xFFFFFF</color>
-</band>
-</chromosome>
-<chromosome index="2" length="19698289" number="2">
-...
-</chromosome>
-<chromosome index="3" length="23459830" number="3">
-...
-</chromosome>
-<chromosome index="4" length="18585056" number="4">
-...
-</chromosome>
-<chromosome index="5" length="26975502" number="5">
-...
-</chromosome>
+  <chromosome index="1" length="30427671" number="1">
+    <band index="1">
+      <start>0</start>
+      <end>30427671</end>
+      <color>0xFFFFFF</color>
+    </band>
+  </chromosome>
+  <chromosome index="2" length="19698289" number="2">
+  	...
+  </chromosome>
+  <chromosome index="3" length="23459830" number="3">
+    ...
+  </chromosome>
+  <chromosome index="4" length="18585056" number="4">
+    ...
+  </chromosome>
+  <chromosome index="5" length="26975502" number="5">
+    ...
+  </chromosome>
 </genome>
 ```
 
@@ -84,7 +85,8 @@ Genomaps.js needs an XML file that describes the organism chromosome to be visua
 
 ## Input data
 
-Basemaps are provided to the Genomaps object as a path url that returns an XML file with a genome root element. In Knetminer basemaps are served from our API endpoint and detailed explaination on how the path url should be structured can be found in the `Generating Genomaps.js` section below.
+Basemaps are provided to the Genomaps object as a path url that returns an XML file with a genome root element. In Knetminer basemaps are served from our API endpoint and detailed explaination on how the path url should be structured can be found in the next section.
+
 * TODO: describe the input, or point to examples from knetminer.com
 
 
@@ -98,10 +100,10 @@ By default the chart will size to fit the containing element.
 
 The chart will then need to be drawn by creating a GeneMap object and calling the .draw() method:
 
-	var chart = GENEMAP.GeneMap({api_url: 'http://my.server:8080/server-example/arabidopsis/'});
+	var chart = GENEMAP.GeneMap({api_url: 'http://my.server:8000/server-example/arabidopsis/'});
 	chart.draw("#map", basemapPath, annotationsPath);
 
-**Note:** the `api_url` parameter is used to tell GeneMap how to construct URLs to send new queries to KnetMiner. It should include the full server method, name and port (`http://my.server:8080`), webapp (`server-example`), and datasource name (`arabidopsis` in this example). Omitting it will not break GeneMap but some KnetMiner-specific tasks may fail.
+**Note:** the `api_url` parameter is used to tell GeneMap how to construct URLs to send new queries to KnetMiner. It should include the full server method, name and port (`http://my.server:8000`), webapp (`server-example`), and datasource name (`arabidopsis` in this example). Omitting it will not break GeneMap but some KnetMiner-specific tasks may fail.
 
 The `basemapPath` and `annotationsPath` variable need to include a path to the basemap and annotations XML files that you want to draw on the chart. The annotationPath is optional and doesn't have to be supplied.
 
@@ -111,7 +113,7 @@ The `basemapPath` and `annotationsPath` variable need to include a path to the b
 	
 	var baseMapUrl = api_url/dataset-route/basemap.xml?taxId=3702;
 
-[L.21]:https://www.ncbi.nlm.nih.gov/taxonomy/?term=3702
+[L.21]: https://www.ncbi.nlm.nih.gov/taxonomy/?term=3702
 
 * TODO: describe how the default location can be changed, show examples from knetminer.
 

@@ -7,30 +7,43 @@ extensions. See [here](UseGuide.md) for a guide on how to use the library.
 
 You need the following to build Genomap.js for the first time:
 
-- Install Node.js (https://nodejs.org/en/download/) & NPM
-- Install Git (https://git-scm.com/)
-- Install all dependencies: `npm install `
+- [Node.js](https://nodejs.org/en/download/)
+- NPM
+- Webpack
+- [Git](https://git-scm.com/), to clone the github repository on your PC.
+- Install all dependencies: `npm install`
 
-See [package.json](../package.json) for a list of dependencies and their versions (including NPM and Node.js).
+See [package.json](../package.json) for a list of dependencies and their versions.
 
 ## To test Genomap.js:
 
-After running, ```npm install``` in genomap.js directory, run ```npm run dev``` and navigate to <http://localhost:8080/> to run the demo page.
+Genomap.js can be build via the command `npm run build`, issued from its code base root.
 
+If that succeds, run `npm run demo` to start a demo application, reachable at http://localhost:8000/  
+
+The `npm run demoDev` variant is the same application, but with a set of development additions, including a watch mechanism that auto-updates the server files as they are modified.
+
+`npm run clean` removes all the build files (including NPM downloads) and allows from a fresh rebuild.
+
+The names after run are defined in `package.json`, some of which, in turn, invokes `gulpfile.js` goals (see next section). 
 
 ## Details about the build system
 
-TODO: to be reviewed
-
-The Genomaps.js build system is based on NPM, Gulp and Webpack. Namely, 
+The Genomaps.js build system is based on NPM, Gulp and Webpack. Namely: 
 
 * The build process is started from NPM, which lookup for actions to run in the `scripts` section of the `package.json` file
 * Webpack is used to pick up files from third-party dependencies and the package.json configuration above takes care of running it before Gulp
 * Gulp is used for most of the building process, such as cleaning directories, packing all the dependencies in single files into `dist/`, running the test/demo server.
 
 These are the main tasks available from the [Gulp file](gulpfile.js):
-* *servedev* start a test/demo server
-* *optimise* build the combined & minified JavaScript and CSS files placing them into the `dist` folder
+
+exports.build = series(coreTasks)
+exports.demo = series(launchProdServer)
+exports.demoDev = parallel(series(coreTasks,series(launchDevServer)),series(watchFiles))
+
+* *build* builds the combined & minified JavaScript and CSS files placing them into the `dist` folder
+* *demo*: starts a test/demo server
+* *demoDev*: starts the demo server, in dev mode (eg, auto-updates server files) 
 * *vet* does some static code analysis
 
 
@@ -207,5 +220,5 @@ This was compiled using [WinLess](http://winless.org/) although any Less compile
 
 There are a number of automated tests written in Jasmine. 
 These tests aren't comprehensive but do cover several areas (particularly the areas that don't directly interact with the DOM). 
-To run the tests run the `gulp serve-dev` process and navigate to http://localhost:8080/SpecRunner.html.
+To run the tests run the `gulp serve-dev` process and navigate to http://localhost:8000/SpecRunner.html.
 
