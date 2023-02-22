@@ -177,8 +177,7 @@ function watchFiles(cb){
 }
 
 
- const coreTasks =  series(cleanStyles,cleanDist,compileStyles,copyLibCss,copyLibJs,copyJqueryBstrapJs,copyNoJquery,copyJs,copyAssets,copydevHtml,copyProdHtml)
-
+const coreTasks =  series(cleanStyles,cleanDist,compileStyles,copyLibCss,copyLibJs,copyJqueryBstrapJs,copyNoJquery,copyJs,copyAssets,copydevHtml,copyProdHtml)
 
 
 
