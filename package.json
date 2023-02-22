@@ -67,8 +67,8 @@
     "test": "test"
   },
   "files": [
-	  "dist",
-	  "docs"
+    "dist",
+    "docs"
   ],
   "dependencies": {
     "bootstrap": "^3.3.6",
@@ -143,9 +143,10 @@
     "> 5%"
   ],
   "scripts": {
-	  "clean": "rm -Rf node_modules dist .tmp",
+    "clean": "rm -Rf node_modules dist .tmp",
+    "cleanDeep": "npm run clean && npm cache clean --force",
     "build": "npm install && gulp build",
     "demo": "gulp demo",
-    "demoDev" : "gulp demoDev"
+    "demoDev": "gulp demoDev"
   }
 }

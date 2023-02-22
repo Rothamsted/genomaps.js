@@ -35,10 +35,6 @@ The Genomaps.js build system is based on NPM and Gulp. Namely:
 
 These are the main tasks available from the [Gulp file](gulpfile.js):
 
-exports.build = series(coreTasks)
-exports.demo = series(launchProdServer)
-exports.demoDev = parallel(series(coreTasks,series(launchDevServer)),series(watchFiles))
-
 * *build* builds the combined & minified JavaScript and CSS files placing them into the `dist` folder
 * *demo*: starts a test/demo server
 * *demoDev*: starts the demo server, in dev mode (eg, auto-updates server files) 

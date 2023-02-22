@@ -59,7 +59,7 @@ function compileStyles(cb){
   cb();
 };
 
-// util function to copy less file from src folder to .tmp and dist folders
+// Copies less files from src folder to dist folders (used to copy to tmpDir too)
 function compileLess(){
   return src(config.less)
   .pipe($.plumber(function (err) {
@@ -85,7 +85,6 @@ async function copyLibCss(){
     .pipe(dest(config.buildCss),{append:true});
 };
 
-// ** Copying node dependencies d3,lodash, Filesaver ... **
 function copyLibJs(cb){
   $.util.log('Moving js lib unordered files into place');
   processJs(config.libsJs, 'genemap-lib');
@@ -129,7 +128,7 @@ function copyProdHtml(cb){
   cb();
 }
 
-// ** Copying Html file to .tmp folder **
+// ** Copying Html file to tmp folder **
 function copydevHtml(cb){
   copyHtml(config.devHtml, config.srcDir)
   cb()
@@ -144,7 +143,7 @@ function copyHtml(fileLocation, outputLocation){
 // launching dev server
 async function launchProdServer(){
   return $.connect.server({
-    root: ['dist', 'test/data'],
+    root: [ config.build, config.testDataDir ],
     port: '8000',
     livereload: false,
   });
@@ -152,8 +151,11 @@ async function launchProdServer(){
 
 
  function launchDevServer(cb){
+	// TODO this used to have tmpDir only, but now many files aren't copied into tmpDir anymore
+	// Also, it's not clear why We have to add testDataDir, which is a subdir of testDir
+	//
   return $.connect.server({
-    root: ['.tmp/', 'test/data'],
+    root: [ config.build, config.tmpDir, config.testDir, config.testDataDir ],
     port: '8000',
     livereload: true,
   });

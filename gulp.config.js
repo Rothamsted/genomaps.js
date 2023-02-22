@@ -1,16 +1,6 @@
 
 module.exports = function () {
 
-/* TODO: remove, not used
-  var libsWithOrder =[
-		'./node_modules/loglevel.js', 
-	  './node_modules/bootstrap.js',
-	  './node_modules/bootstrap-select.js',
-	  './node_modules/jquery.bootstrap-touchspin.js',
- 	]
-*/
-
-
   var config = {
 
     tmpDir: './.tmp/',
@@ -57,6 +47,8 @@ module.exports = function () {
     outputJsDir: './.tmp/js/',
     outputLib: './.tmp/lib/',
     outputSvg: './.tmp/assets/*.svg',
+    testDir: './test',
+    testDataDir: './test/data',
     xmlFiles: './test/data/**/*.xml',
 
     // production output
