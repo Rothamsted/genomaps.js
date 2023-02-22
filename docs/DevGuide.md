@@ -9,7 +9,6 @@ You need the following to build Genomap.js for the first time:
 
 - [Node.js](https://nodejs.org/en/download/)
 - NPM
-- Webpack
 - [Git](https://git-scm.com/), to clone the github repository on your PC.
 - Install all dependencies: `npm install`
 
@@ -29,10 +28,9 @@ The names after run are defined in `package.json`, some of which, in turn, invok
 
 ## Details about the build system
 
-The Genomaps.js build system is based on NPM, Gulp and Webpack. Namely: 
+The Genomaps.js build system is based on NPM and Gulp. Namely: 
 
 * The build process is started from NPM, which lookup for actions to run in the `scripts` section of the `package.json` file
-* Webpack is used to pick up files from third-party dependencies and the package.json configuration above takes care of running it before Gulp
 * Gulp is used for most of the building process, such as cleaning directories, packing all the dependencies in single files into `dist/`, running the test/demo server.
 
 These are the main tasks available from the [Gulp file](gulpfile.js):

@@ -91,7 +91,6 @@
     "util": "^0.12.4"
   },
   "devDependencies": {
-    "copy-webpack-plugin": "^5.1.2",
     "del": "^2.2.0",
     "event-stream": "4.0.1",
     "fsevents": "2.3.2",
@@ -126,8 +125,6 @@
     "run-sequence": "^1.1.5",
     "uniq": "^1.0.1",
     "util": "^0.12.4",
-    "webpack": "^4.44.2",
-    "webpack-cli": "^4.9.2",
     "yargs": "^17.4.1"
   },
   "overrides": {
@@ -144,7 +141,7 @@
   ],
   "scripts": {
 	  "clean": "rm -Rf node_modules dist .tmp",
-    "build": "npm install && webpack && gulp build",
+    "build": "npm install && gulp build",
     "demo": "gulp demo",
     "demoDev" : "gulp demoDev"
   }

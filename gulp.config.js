@@ -1,11 +1,14 @@
 
 module.exports = function () {
+
+/* TODO: remove, not used
   var libsWithOrder =[
-		'./src/lib/loglevel.js', 
-	  './src/lib/bootstrap.js',
-	  './src/lib/bootstrap-select.js',
-	  './src/lib/jquery.bootstrap-touchspin.js',
+		'./node_modules/loglevel.js', 
+	  './node_modules/bootstrap.js',
+	  './node_modules/bootstrap-select.js',
+	  './node_modules/jquery.bootstrap-touchspin.js',
  	]
+*/
 
 
   var config = {
@@ -17,26 +20,26 @@ module.exports = function () {
     srcJS: './src/js/*js',
     srcCSS: './src/css/*css', 
     libCss: [
-			'./src/lib/jquery.bootstrap-touchspin.css',
-			'./src/lib/bootstrap-select.css'
+			'./node_modules/bootstrap-touchspin/src/jquery.bootstrap-touchspin.css',
+			'./node_modules/bootstrap-select/dist/css/bootstrap-select.css'
 		],
     libsOrderJs:[
-	    './src/lib/loglevel.js',
-	    './src/lib/jquery.js', 
-	    './src/lib/bootstrap.js',
-	    './src/lib/bootstrap-select.js',
-	    './src/lib/jquery.bootstrap-touchspin.js',
+	    './node_modules/loglevel/dist/loglevel.js',
+	    './node_modules/jquery/dist/jquery.js', 
+	    './node_modules/bootstrap/dist/js/bootstrap.js',
+	    './node_modules/bootstrap-select/dist/js/bootstrap-select.js',
+	    './node_modules/bootstrap-touchspin/src/jquery.bootstrap-touchspin.js',
 	  ],
 	  libsJs:[
-		  './src/lib/lodash.js',
-			'./src/lib/d3.js',
-			'./src/lib/d3.promise.js',
-			'./src/lib/labella.js',
-			'./src/lib/FileSaver.js',
-			'./src/lib/simple_statistics.js', 
-			'./src/lib/saveSvgAsPng.js', 
-			'./src/lib/es5-shim.js',
-			'./src/lib/es6-shim.js',
+		  './node_modules/lodash/lodash.js',
+			'./node_modules/d3/d3.js',
+			'./node_modules/d3.promise/dist/d3.promise.js',
+			'./node_modules/labella/dist/labella.js',
+			'./node_modules/file-saver/FileSaver.js',
+			'./node_modules/simple-statistics/dist/simple_statistics.js', 
+			'./node_modules/saveSvgAsPng/saveSvgAsPng.js', 
+			'./node_modules/es5-shim/es5-shim.js',
+			'./node_modules/es6-shim/es6-shim.js',
    	],
  
     // all the source files

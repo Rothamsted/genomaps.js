@@ -1,3 +1,5 @@
+// TODO: remove, webpack operations were superseded by using proper paths in Gulp.
+
 var CSS = [
 	'bootstrap-touchspin/src/jquery.bootstrap-touchspin.css',
   'bootstrap-select/dist/css/bootstrap-select.css'

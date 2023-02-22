@@ -1,4 +1,4 @@
-
+// TODO: remove, webpack operations were superseded by using proper paths in Gulp.
 
 var path = require('path');
 var moduleAssets = require('./moduleAssets'); 
