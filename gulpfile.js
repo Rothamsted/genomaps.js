@@ -72,9 +72,9 @@ function compileLess(){
   }))
   .pipe($.less())
   .pipe($.autoprefixer())
-  .pipe(concat('genemap.css'))
+  .pipe(concat('genomap.css'))
   .pipe(dest(config.buildCss))
-  .pipe(rename('genemap.min.css'))
+  .pipe(rename('genomap.min.css'))
   .pipe($.csso())
   .pipe(dest(config.buildCss),{append:true})
  }
@@ -91,7 +91,7 @@ async function copyLibCss(){
 
 function copyLibJs(cb){
   $.util.log('Moving js lib unordered files into place');
-  processJs(config.libsJs, 'genemap-lib');
+  processJs(config.libsJs, 'genomap-lib');
   cb()
 }
 
@@ -116,7 +116,7 @@ function copyNoJquery(){
 // *** custom JS copying ***
 function copyJs(done){
   $.util.log('Moving js files into place');
-  processJs(config.srcJS,'genemap')
+  processJs(config.srcJS,'genomap')
   done()
 };
 

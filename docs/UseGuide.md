@@ -40,12 +40,12 @@ Of course, there are alternative ways to deploy and use the library files. The m
 To use Genomaps.js you need the following links:
 
 ```html
-<script src="./dist/js/genemap-lib.js"></script>
+<script src="./dist/js/genomap-lib.js"></script>
 <script src="./dist/js/jquery-bstrap.js"></script>
-<script src="./dist/js/genemap.js"></script>
+<script src="./dist/js/genomap.js"></script>
 
 <link rel="stylesheet" href="./dis/styles/jquery-bstrap.css">
-<link rel="stylesheet" href="./dis/styles/genemap.css">
+<link rel="stylesheet" href="./dis/styles/genomap.css">
 ```
 
 Alternatively, use the `*.mini.*` files, to link compact versions of the same dependencies. Note that the latter are usually very difficult to use for debugging.  
