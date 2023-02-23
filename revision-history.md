@@ -1,11 +1,8 @@
 # Revision History
 
-* This file was last revised on 2023-02-22. *Please, keep this note updated*
+* This file was last revised on 2023-02-23. *Please, keep this note updated*
 
-## 2.0-SNAPSHOT
-* Current dev version.
-
-## 2.0-RC
+## v2.0.0-RC.1
 * Many changes to 1.x, including:
   * New build system, which removed Bower
   * Upgrades to dependencies
