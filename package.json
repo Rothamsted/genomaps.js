@@ -1,6 +1,6 @@
 {
   "name": "genomaps",
-  "version": "2.0-SNAPSHOT",
+  "version": "2.0.0-RC.1",
   "license": "MIT",
   "description": "Interactive visualization of high-density SNP, QTL, GWAS and gene data",
   "main": "genomaps.js",
