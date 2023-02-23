@@ -7,8 +7,8 @@ module.exports = function () {
 
     // all the JavaScript files for this project
     alljs: './src/**/*.js',
-    srcJS: './src/js/*js',
-    srcCSS: './src/css/*css', 
+    srcJS: './src/js/*.js',
+    srcCSS: './src/css/*.css', 
     libCss: [
 			'./node_modules/bootstrap-touchspin/src/jquery.bootstrap-touchspin.css',
 			'./node_modules/bootstrap-select/dist/css/bootstrap-select.css'

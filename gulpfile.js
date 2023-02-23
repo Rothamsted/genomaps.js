@@ -36,11 +36,15 @@ task('vet', function () {
   done();
 };
 
-// util function to rename,concat and minify javascript files
+/**
+ * Utility that merges multiple .js files into one output and additionally outputs 
+ * the minified version.
+ * 
+ */
 function processJs(fileLocation, fileName){
   return src(fileLocation) 
     .pipe(concat(`${fileName}.js`))
-    .pipe(dest(config.outputJsDir, {overwrite:true}))
+    .pipe(dest(config.buildJs, {overwrite:true}))
     .pipe(rename(`${fileName}.min.js`))
     .pipe(terser())
     .pipe(dest(config.buildJs, {overwrite:true}))
@@ -69,7 +73,7 @@ function compileLess(){
   .pipe($.less())
   .pipe($.autoprefixer())
   .pipe(concat('genemap.css'))
-  .pipe(dest(config.outputCssDir))
+  .pipe(dest(config.buildCss))
   .pipe(rename('genemap.min.css'))
   .pipe($.csso())
   .pipe(dest(config.buildCss),{append:true})
@@ -79,7 +83,7 @@ function compileLess(){
 async function copyLibCss(){
   return src(config.libCss)
     .pipe(concat('jquery-bstrap.css'))
-    .pipe(dest(config.outputCssDir),{append:true})
+    .pipe(dest(config.buildCss),{append:true})
     .pipe(rename('jquery-bstrap.min.css'))
     .pipe($.csso())
     .pipe(dest(config.buildCss),{append:true});
@@ -98,11 +102,12 @@ async function copyJqueryBstrapJs(){
 }
 
 //** Copying a replicate of jquery-bstrap.js file without Jquery **
+// TODO: use processJs?
 function copyNoJquery(){
   return src(config.libsOrderJs)
   .pipe(ignore.exclude('jquery.js'))
   .pipe(concat('nonjquery-bstrap.js'))
-  .pipe(dest(config.outputJsDir, {overwrite:true}))
+  .pipe(dest(config.buildJs, {overwrite:true}))
   .pipe(rename('nonjquery-bstrap.js.min.js'))
   .pipe(terser())
   .pipe(dest(config.buildJs, {overwrite:true}))
