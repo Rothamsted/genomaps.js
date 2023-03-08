@@ -155,7 +155,7 @@ async function launchProdServer(){
 };
 
 
- function launchDevServer(cb){
+function launchDevServer(cb){
 	// TODO this used to have tmpDir only, but now many files aren't copied into tmpDir anymore
 	// Also, it's not clear why We have to add testDataDir, which is a subdir of testDir
 	//
@@ -165,7 +165,7 @@ async function launchProdServer(){
     livereload: true,
   });
   cb()
- }
+}
 
 function reload (cb) {
   src(config.devHtml)
